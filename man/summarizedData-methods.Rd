@@ -1,0 +1,18 @@
+\docType{methods}
+\name{show,summarizedData-method}
+\alias{show,summarizedData-method}
+\title{show method for summarized 450k Illumina Human Methylation data}
+\usage{
+\S4method{show}{summarizedData}(object)
+}
+\arguments{
+  \item{object}{summarizedData object}
+}
+\value{
+print short summary summarizedData object
+}
+\description{
+show method for summarized 450k Illumina Human Methylation
+data
+}
+

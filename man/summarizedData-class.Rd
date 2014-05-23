@@ -1,0 +1,27 @@
+\docType{class}
+\name{summarizedData-class}
+\alias{summarizedData-class}
+\title{container for summarized 450k Illumina Human Methylation data}
+\description{
+container for summarized 450k Illumina Human Methylation
+data
+}
+\section{Slots}{
+  \describe{ \item{\code{targets}:}{Object of class
+  \code{"data.frame"} containing targets information.}
+  \item{\code{controls}:}{Object of class
+  \code{"data.frame"} containing quality control probe
+  information.} \item{\code{Rcontrols}:}{Object of class
+  \code{"matrix"} containing quality control probe
+  intensities for the Red channel.}
+  \item{\code{Gcontrols}:}{Object of class \code{"matrix"}
+  containing quality control probe intensities for the Grn
+  channel.} \item{\code{DPfreq}:}{Object of class
+  \code{"vector"} containing frequencies of probes above
+  background.} \item{\code{MU}:}{Object of class
+  \code{"matrix"} containing Methylated and Unmethylated
+  internsities.} \item{\code{plotdata}:}{Object of class
+  \code{"list"} containing data to make plotting
+  efficient.} }
+}
+

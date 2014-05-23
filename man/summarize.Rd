@@ -1,0 +1,46 @@
+\name{summarize}
+\alias{summarize}
+\title{summarization of the human methylation 450k samples}
+\usage{
+summarize(targets, batchSize = -1, BPPARAM = NULL, rp.zero = TRUE,
+  verbose = TRUE, file = NULL)
+}
+\arguments{
+  \item{targets}{valid minfi targets file}
+
+  \item{batchSize}{the size of each the batch}
+
+  \item{BPPARAM}{see bpparam()}
+
+  \item{rp.zero}{Default TRUE replaces zero intensity
+  values with NA's}
+
+  \item{verbose}{default is TRUE}
+
+  \item{file}{if given summarized data is stored as RData
+  object}
+}
+\value{
+summarized data is saved optionally returned
+}
+\description{
+summarize is the main function when called all samples in
+the targets file will be summarized
+}
+\details{
+By default the summarization is performed on all data at
+once. Optionally the data can be summarized in batches
+using the batchSize option. Summarization of data can be
+performed in parallel as well see the MethylAid vignette
+for examples.
+}
+\examples{
+library(minfiData)
+baseDir <- system.file("extdata", package = "minfiData")
+targets <- read.450k.sheet(baseDir)
+data <- summarize(targets)
+}
+\author{
+mvaniterson
+}
+

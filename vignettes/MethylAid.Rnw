@@ -1,0 +1,238 @@
+% \VignetteIndexEntry{MethylAid: Visual and interactive quality control of large Illumina 450k data sets}
+% \VignettePackage{MethylAid}
+% \VignetteEngine{knitr::knitr}
+
+\documentclass[12pt]{article}
+\usepackage[english]{babel} %%remove tildes e.q. in bibliography
+
+<<style, eval=TRUE, echo=FALSE, results="asis">>=
+BiocStyle::latex()
+@
+
+\author{M. van Iterson, E.W. Tobi, R. Slieker, W. den Hollander, R. Luijk,
+  \\P.E. Slagboom and B.T. Heijmans
+  \\Department of Molecular Epidemiology,
+  \\Leiden University Medical Center, Leiden, The Netherlands}
+
+\title{MethylAid: Visual and interactive quality control of large Illumina 450k
+  data sets}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+
+\Biocpkg{MethylAid} is specially designed for quality control of large sets of
+DNA methylation data e.g., epigenomewide association studies (EWAS). Extracting 
+intensities from IDAT files can be done in batches and/or in parallel to reduce 
+memory load and/or overcome long run-times. It requires two function calls in 
+going from IDAT files to launch the interactive web application; 
+\Rfunction{summarize} and \Rfunction{visualize}. For more information see 
+van Iterson \emph{et alo.} \cite{iterson2014}.
+
+To show the utility of \Biocpkg{MethylAid}, we first show a quick example using
+a small set of idat files taken from the \Biocexptpkg{minfiData} package. A
+second example uses presummarized data on 500 samples which can be used directly
+to launch the web application. A third example shows how level 1 data downloaded
+from The Cancer Genome Atlas can be used. Similar, in the fourth example we show
+how data downloaded from GEO\cite{Edgar2002} can be used. For example, Liu
+\emph{et al.} \cite{Liu2013} studied genome-wide DNA methylation levels to
+determine whether Rheumatoid arthritis patients has methylation differences
+comparing to normal controls in peripheral blood leukocytes (PBLs) and deposit
+raw data on GEO. Furthermore, we show how the summarization can be performed in
+batches or in parallel using the \Biocpkg{BiocParallel} package which provides a
+uniform idiom for parallel computing resources.
+
+\section{Quick example}
+This example shows how to summarize a small set of idat files e.g. the
+summarized data fits into the available RAM. The \Biocexptpkg{minfiData}
+provides such a set. The package contains 450k DNA methylation data on 6 samples
+across 2 groups. Since, \Biocpkg{MethylAid} uses internally the
+\Biocpkg{minfi}\cite{Aryee2014} function \Rfunction{read.450k.exp}, target
+information should be provided in a similar way.
+
+<<minfiDatatargets, cache=TRUE, message=FALSE>>=
+library(MethylAid)
+library(minfiData)
+baseDir <- system.file("extdata", package = "minfiData")
+targets <- read.450k.sheet(baseDir)
+@
+
+The function \Rfunction{summarize} performs the summarization of the the control
+probes present on the array. The output produced by \Rfunction{summarize} is an
+object of class \Robject{summarizedData} which should be passed on to the
+function \Rfunction{visualize} which in turn will launch the interactive web
+application.
+
+<<minfiDataMethylAid, cache=TRUE, eval=FALSE>>=
+data <- summarize(targets)
+visualize(data)
+@
+
+\bioccomment{\Rfunction{visualize} can only be called interactively from within
+a \R{} session.}
+
+\section{Presummarized data example}
+
+For those who directly want to explore the web application we have presummarized
+450k data on 500 samples.
+
+<<presummarized, message=FALSE, eval=FALSE>>=
+library(MethylAid)
+data(exampleData)
+visualize(exampleData)
+@ 
+
+\bioccomment{\Rfunction{visualize} can only be called interactively from within
+  a \R{} session.}
+
+When your webbrowser opens you should see something like Figure
+\ref{screenshot_MethylAid}. In the `About` panel a description is given of what
+you see and can do. Enjoy, exploring!
+
+\begin{figure}
+   \centering
+   \includegraphics[width=\textwidth]{screenshot_MethylAid}
+   \caption{Screen shot \Rpackage{MethylAid} interactive web application: The rotated M versus U plot is shown using example data from the package on 500 450k human methylation samples. The colors indicated different scan batches selected using the highlight-metadata column input selector. The dashed vertical line indicates the default filter theshold for the rotated M versus U plot.}
+   \label{screenshot_MethylAid}
+\end{figure}
+
+\section{Using 450k data downloaded from The Cancer Genome Atlas}
+
+The Cancer Genome Atlas (\url{http://cancergenome.nih.gov/}) provides a valuable
+source of genomic data of various types of different cancers. Here all Breast
+invasive carcinoma (BRCA) 450k level 1 DNA methylation data were download from
+the TCGA Data Portal. A targets file can be constructed from the sdrf file but
+some preprocessing is necessary. The following code chunk show how to make a
+minimal targets file from a sdrf file. There is also a check to see if all files
+a present otherwise these will be removed from the targets file. \fixme{In the
+  future this might be added as an internal check.}
+
+<<tcgatargets, eval=FALSE>>=
+sdrfFile <- list.files(pattern="sdrf", full.name=TRUE)
+targets <- read.table(sdrfFile, header=TRUE, sep="\t")
+path <- "path_to_idat_files"
+targets <- targets[file.exists(file.path(path, targets$Array.Data.File)),]
+targets <- targets[grepl("Red", targets$Array.Data.File),]
+targets$Basename <- gsub("_Red.*$", "", file.path(path, targets$Array.Data.File))
+rownames(targets) <- basename(targets$Basename)
+head(targets)
+@
+
+Now the $2\times 137$ idat files can be summarized. This could be too much to
+read in at once therefore the option \Rcode{batchSize = 15} is used for
+summarization of the data in batches of size 15. Furthermore, the summarized
+data is stored as an \Rcode{RData}-object for later use, using the option
+\Rcode{file = "tcgaBRCA"}. After summarization the data can be loaded into \R{}
+and passed to \Rfunction{visualize} for interactive exploration of the data.
+
+<<tcgaMethylAid, eval=FALSE>>=
+summarize(targets, batchSize = 15, file = "tcgaBRCA")
+load("tcgaBRCA.RData")
+visualize(tcgaBRCA)
+@
+
+\bioccomment{\Rfunction{visualize} can only be called interactive from within a
+\R{} session.}
+
+\section{Example using 450k data downloaded from GEO}
+
+Several 450k data sets are available from GEO some include raw idat files
+e.g. the study of Liu \emph{et al.} \cite{Liu2013} with GEO series number:
+GSE42861. The idat files of this study are available under
+GSE42861\_RAW.tar. Target information was extracted using the \Biocpkg{GEOquery}
+package. \bioccomment{To run the following code chunk a considerable amount of
+  RAM should be available.}
+
+<<geotargets, eval=FALSE, tidy=FALSE>>=
+library(GEOquery)
+gse <- getGEO("GSE42861")
+targets <- pData(phenoData(gse[[1]]))
+path <- "path_to_idat_files"
+targets$Basename <- file.path(path,
+gsub("_Grn.*$", "", basename(targets$supplementary_file)))
+rownames(targets) <- basename(targets$Basename)
+@
+
+Again we store the summarized data for later use and summarize the data in
+batches of size 15.
+
+<<geoMethylAid, eval=FALSE>>=
+summarize(targets, batchSize = 15, file="RA")
+load("RA.RData")
+visualize(RA)
+@
+
+\bioccomment{\Rfunction{visualize} can only be called interactive from within a
+\R{} session.}
+
+\section{Parallel summarization}
+
+\Biocpkg{MethylAid} was specially designed for quality control of large set of
+DNA methylation data e.g. EWAS studies. Summarization can be performed in
+batches to overcome memory problems e.g. when too many idat files are read at
+once. Just provide the option \Rcode{batchSize} to the \Rfunction{summarize}
+function as we did in the previous example. Too overcome long run-times
+summarization can be performed in parallel as well using various computing
+resources facilitated by the \Biocpkg{BiocParallel} package.
+
+The \Rfunction{summarize} accepts a \Rcode{bpparam} argument
+e.g. \Robject{MulticoreParam} (\bioccomment{unfortunately this is not available
+  on Windows}). For example, perform summarization on a multiple core machine
+with 8 cores requested is easy as this:
+
+<<tcgaMethylAidmc, eval=FALSE>>=
+library(BiocParallel)
+tcga <- summarize(targets, batchSize = 15, BPPARAM = MulticoreParam(workers = 8))
+@
+
+The \Biocpkg{BiocParallel} also allows parallelization on a cluster of computers
+using different job schedulers. For example, using the appropriate configuration
+file a \Robject{BatchJobsParam}-object can be constructed and passed on to the
+\Rfunction{summarize}-function.
+
+<<tcgaMethylAidsge, eval=FALSE, tidy=FALSE>>=
+library(BiocParallel)
+conffile <- system.file("scripts/config.R", package="MethylAid")
+BPPARAM <- BatchJobsParam(workers = 10,
+progressbar = FALSE,
+conffile = conffile)
+summarize(targets, batchSize = 50, BPPARAM = BPPARAM)
+@
+
+The script folder of the package contains example files for parallel
+summarization on a cluster computer using the Sun Grid Engine job scheduler. For
+more information on how to setup a configuration file for other job schedulers
+see the description of \Rpackage{BatchJobs}
+\url{https://github.com/tudo-r/BatchJobs} (\Biocpkg{BiocParallel} relies on the
+cran \R{} package \Rpackage{BatchJobs}\cite{Bischl2011}). Probaly, you should at
+least set your email address in \Rcode{scripts/summarize.sh} and use the proper
+\R{} executable e.g change this in \Rcode{scripts/summarize.sh} and
+\Rcode{scripts/sge.tmpl}.
+
+% \section{TODOs}
+% \begin{itemize}
+% \item add more general reading capabilities
+% \item subset data to be visualized using a column and value of the targets file
+% \item Functionality for 27k arrays (maybe in old version minfi)
+% \item Somehow show NA's in plots
+% \item Zoom option filter-plots
+% \item Highlight region of samples e.g. using D3 plotting
+% \item Search for particular samples
+% \item Selected a sample in table and highlight
+% \item color removed samples by filter
+% \end{itemize}
+
+\section{Session info}
+
+Here is the output of \Rfunction{sessionInfo} on the system on which this
+document was compiled:
+
+<<sessionInfo, results='asis', echo=FALSE>>=
+toLatex(sessionInfo())
+@
+
+\bibliography{MethylAid}
+
+\end{document}

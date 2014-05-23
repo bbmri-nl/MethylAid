@@ -1,0 +1,194 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
+	<TITLE></TITLE>
+	<META NAME="GENERATOR" CONTENT="LibreOffice 3.5  (Linux)">
+	<META NAME="CREATED" CONTENT="20140502;9303100">
+	<META NAME="CHANGED" CONTENT="20140502;10241200">
+	<STYLE TYPE="text/css">
+	<!--
+		@page { margin: 0.79in }
+		P { margin-bottom: 0.08in }
+		H1 { margin-bottom: 0.08in }
+		H1.western { font-family: "Liberation Sans", sans-serif; font-size: 16pt }
+		H1.cjk { font-family: "WenQuanYi Micro Hei"; font-size: 16pt }
+		H1.ctl { font-family: "Lohit Hindi"; font-size: 16pt }
+		A:link { so-language: zxx }
+	-->
+	</STYLE>
+</HEAD>
+<BODY LANG="en-US" DIR="LTR">
+<H1 CLASS="western">Help</H1>
+<P>The MethylAid web application provides different tab-panels for
+displaying filter control plots, sample-dependent and
+sample-independent diagnostic plots of the various quality control
+probes present on the 450k Human Methylation array. 
+</P>
+<P>On a filter control plot you can highlight a single sample by
+using a mouse click (clicking in `empty space` will undo the
+highlighting). The highlighted sample will be visible on all plots. 
+</P>
+<P>On the left of the plot area there is a conditional-control panel
+with widgets providing additional interaction specific to each plot.
+When provided, samples can be colored by metadata using a drop down
+menu to select a particular column. 
+</P>
+<P>For each filter plot a slider is available to adjust the default
+threshold for the determination of outliers</P>
+<P>A checkbox is present to allow highlighting of the outliers which
+will also be visible on all plots. An overview of the determined
+outliers is given in a separated tabpanel. Furthermore, each plot can
+be downloaded as a png image. 
+</P>
+<H1 CLASS="western">Contact</H1>
+<P><A HREF="mailto:m.van_iterson@lumc.nl"><FONT FACE="Liberation Sans, sans-serif"><FONT SIZE=3>m.van_iterson@lumc.nl</FONT></FONT></A></P>
+<P>Department of Molecular Epidemiology,  Leiden University Medical
+Center, 
+</P>
+<P>Leiden, The Netherlands</P>
+<H1 CLASS="western"><B>Description of the filter plots</B></H1>
+<P><SPAN STYLE="font-weight: normal">Five filter plots are proposed
+to determine bad-quality samples. A plot based on the median
+Methylated and Unmethylated log2 intensity, Type I bisufite
+conversion quality control probes, non-polymorphic sample-dependent
+quality control probes, and sample-dependent hybridization quality
+control probes and a plot representing per sample the fraction of
+probe above background using the detection p-value based on the
+negative controls. To make optimal use of the plotting area and a
+filtering out bad quality samples easier by using just one threshold
+all plots except based on the the detection p-value are 45 degrees
+rotated like the tranditional microarray MA-plots. </SPAN>
+</P>
+<H1 CLASS="western"><B>Description of the quality control probes</B></H1>
+<P><SPAN STYLE="font-weight: normal">Below you find a detailed
+description of the quality control probes taken from “Infinium HD
+Assay</SPAN><B> </B><SPAN STYLE="font-weight: normal">Methylation
+Protocol Guide” (Part # 15019519 Rev. B). </SPAN>
+</P>
+<P><BR><BR>
+</P>
+<P><B>Bisulphite conversion controls (Type I)</B>: These controls use
+the Infinium I probe design and allele- pecific single base extension
+to monitor efficiency of bisulfite conversion. If the bisulfite
+conversion reaction was successful, the 'C' (Converted) probes will
+match the converted sequence and be extended. If the sample has
+unconverted DNA, the 'U' (Unconverted) probes will be extended. There
+are no underlying C bases in the primer landing sites, except for the
+query site itself. Performance of bisulfite conversion controls C1,
+C2, and C3 should be monitored in the Green channel, and controls C4,
+C5, and C6 should be monitored in</P>
+<P>Red channel.</P>
+<P><BR><BR>
+</P>
+<P><B>Bisulphite conversion controls (TypeII)</B>: These controls use
+Infinium II probe design and single base extension to monitor the
+efficiency of bisulfite conversion. If the bisulfite conversion
+reaction was successful, the 'A' base will be incorporated and the
+probe will have intensity in the Red channel. If the sample has
+unconverted DNA, the 'G' base will be incorporated across the
+unconverted cytosine, and the probe will have elevated signal in the
+Green channel. 
+</P>
+<P><BR><BR>
+</P>
+<P><B>Specificity controls I</B>: These controls are designed to
+monitor allele-specific extension for Infinium I probes. The
+methylation status of a particular cytosine is carried out following
+bisulfite treatment of DNA through the use of query probes for
+unmethylated and methylated state of each CpG locus. In assay oligo
+design, the A/T match corresponds to the unmethylated status of the
+interrogated C, and the G/C match corresponds to the methylated
+status of C. G/T mismatch controls check for non-specific detection
+of methylation signal over unmethylated background. PM controls
+correspond to A/T perfect match and should give high signal. MM
+controls correspond to G/T mismatch and should give low signal.
+Performance of GT Mismatch controls should be monitored in both green
+and red channels. The Controls dashboard table lists expected outcome
+for controls probes. 
+</P>
+<P><BR><BR>
+</P>
+<P><B>Specificity controls II</B>: These controls are designed to
+monitor extension specificity for Infinium II probes and check for
+potential non-specific detection of methylation signal over
+unmethylated background. Specificity II probes should incorporate the
+'A' base across the non-polymorphic T and have intensity in the Red
+channel. In case of non-specific incorporation of the 'G' base, the
+probe will have elevated signal in the Green channel. 
+</P>
+<P><BR><BR>
+</P>
+<P><B>Non-polymorphic controls</B>: Non-polymorphic controls test the
+overall performance of the assay, from amplification to detection, by
+querying a particular base in a non-polymorphic region of the
+bisulfite genome. They let you compare assay performance across
+different samples. One non-polymorphic control has been designed to
+query each of the four nucleotides (A,T, C,and G). Controls Table on
+page 236 lists the bead type IDs. The target with the C base results
+from querying the opposite whole genome amplified strand generated
+from the converted strand.</P>
+<P><BR><BR>
+</P>
+<P><B>Negative controls</B>: Negative control probes are randomly
+permutated sequences that should not hybridize to the DNA template.
+Negative controls are particularly important for methylation studies
+because of a decrease in sequence complexity after bisulfite
+treatment. The mean signal of these probes defines the system
+background. This is a comprehensive measurement of background,
+including signal resulting from cross-hybridization, as well as
+non-specific extension and imaging system background. The
+GenomeStudio platform uses the Average signal and standard deviation
+of 600 negative controls to establish detection limits for the
+methylation probes. Performance of negative controls should be
+monitored in both green and red channels.</P>
+<P><BR><BR>
+</P>
+<P><B>Staining controls</B>: Staining controls are used to examine
+the efficiency of the staining step in both the red and green
+channels. Staining controls have dinitrophenyl (DNP) or biotin
+attached to the beads. Controls Table on page 236 lists the control
+names, relevant color channel, and expected intensity of biotin and
+DNP labeling controls. These controls are independent of the
+hybridization and extension step. Both red and green channels can be
+evaluated using the Staining Controls.</P>
+<P><BR><BR>
+</P>
+<P><B>Extension controls</B>: Extension controls test the extension
+efficiency of A, T, C, and G nucleotides from a hairpin probe, and
+are therefore sample-independent. Both red (A,T) and green (C,G)
+channels are monitored. Controls Table on page 236 lists the control
+names, the relevant color channel, and the expected intensity of the
+extension controls.</P>
+<P><BR><BR>
+</P>
+<P><B>Target removal:</B> Target removal controls test the efficiency
+of the stripping step after the extension reaction. In contrast to
+allele-specific extension, the control oligos are extended using the
+probe sequence as template. This process generates labeled targets.
+The probe sequences are designed such that extension from the probe
+does not occur. All target  removal controls should result in low
+signal compared to the hybridization controls, indicating that the
+targets were removed efficiently after extension. The target removal
+controls are present in the hybridization buffer RA1. Performance of
+target removal controls should only be monitored in the green
+channel. Controls Table on page 236 lists control names and expected
+signal.</P>
+<P><BR><BR>
+</P>
+<P><B>Hybridization controls:</B> The hybridization controls test the
+overall performance of the entire assay using synthetic targets
+instead of amplified DNA. These synthetic targets complement the
+sequence on the array perfectly, allowing the probe to extend on the
+synthetic target as template. The synthetic targets are present in
+the hybridization buffer (RA1) at three levels, monitoring the
+response from high-concentration (5 pM), medium-concentration (1 pM),
+and low-concentration (0.2 pM) targets. All bead type IDs should
+result in signal with various intensities, corresponding to the
+concentrations of the initial synthetic targets. Performance of
+hybridization controls should only be monitored in the green channel.
+Controls Table on page 236 lists control names for the hybridization
+controls and expected intensities.  
+</P>
+</BODY>
+</HTML>
