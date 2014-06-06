@@ -2,10 +2,10 @@ Package: MethylAid
 Type: Package
 Title: Visual and interactive quality control of large Illumina 450k
         data sets
-Version: 0.99.3
-Date: 2014-05-22
-Author: M. van Iterson, E.W. Tobi, R. Slieker, W. den Hollander and R.
-        Luijk
+Version: 0.99.4
+Date: 2014-06-06
+Author: Maarten van Iterson, Elmar. Tobi, Roderick Slieker, 
+        Wouter den Hollander, Rene Luijk and Bas Heijmans
 Maintainer: M. van Iterson <m.van_iterson@lumc.nl>
 Description: A visual and interactive web application using RStudio's
         shiny package. Bad quality samples are detected using
@@ -17,8 +17,8 @@ Description: A visual and interactive web application using RStudio's
         the user can be explored.
 License: GPL (>= 2)
 VignetteBuilder: knitr
-biocViews: DNAMethylation, Microarray, TwoChannel, QualityControl,
-        Visualization, GUI
+biocViews: DNAMethylation, MethylationArray, Microarray, TwoChannel, 
+           QualityControl, Visualization, GUI
 Depends: R (>= 3.0)
 Imports: methods, matrixStats, BiocParallel, shiny, ggplot2,
         RColorBrewer, minfi, IlluminaHumanMethylation450kmanifest,
