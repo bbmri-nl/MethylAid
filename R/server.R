@@ -6,7 +6,12 @@ server450k <- function(object)
         getTabName <- function()
           {
             switch(input$mainPanel,
-                   `Filter controls`=input$fcPanel,
+                   `Filter controls`= switch(input$fcPanel,
+                     `rotated M vs U plot`="MU",
+                     `Overall sample-dependent control plot`="OP",
+                     `Bisulfite conversion control plot`="BS",
+                     `Overall sample-independent control plot`="HC",
+                     `Detection P-value plot`="DP"),
                    `Sample-dependent controls`=input$sdcPanel,
                    `Sample-independent controls`=input$sicPanel,
                    `Outliers`="",
@@ -21,17 +26,11 @@ server450k <- function(object)
               return(list(x=NULL, y=NULL))
 
             location <- switch(getTabName(),
-                               MU=list(x=input$clickIdMU$x,
-                                 y=input$clickIdMU$y),
-                               OP=list(x=input$clickIdOP$x,
-                                 y=input$clickIdOP$y),
-                               BS=list(x=input$clickIdBS$x,
-                                 y=input$clickIdBS$y),
-                               HC=list(x=input$clickIdHC$x,
-                                 y=input$clickIdHC$y),
-                               DP=list(x=input$clickIdDP$x,
-                                 y=input$clickIdDP$y))
-
+                               MU=list(x=input$clickIdMU$x, y=input$clickIdMU$y),
+                               OP=list(x=input$clickIdOP$x, y=input$clickIdOP$y),
+                               BS=list(x=input$clickIdBS$x, y=input$clickIdBS$y),
+                               HC=list(x=input$clickIdHC$x, y=input$clickIdHC$y),
+                               DP=list(x=input$clickIdDP$x, y=input$clickIdDP$y))
             return(location)
           }
 

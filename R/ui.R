@@ -14,7 +14,7 @@ ui450k <- function(object)
 
     pageWithSidebar(headerPanel("MethylAid: interactive visualization of Illumina 450k Methylation array data"),
 
-                    sidebarPanel(conditionalPanel(condition = "input.mainPanel == 'Filter controls' && (input.fcPanel == 'MU' || input.fcPanel == 'OP' || input.fcPanel == 'BS' || input.fcPanel == 'HC' || input.fcPanel == 'DP')",
+                    sidebarPanel(conditionalPanel(condition = "input.mainPanel == 'Filter controls' && (input.fcPanel == 'rotated M vs U plot' || input.fcPanel == 'Overall sample-dependent control plot' || input.fcPanel == 'Bisulfite conversion control plot' || input.fcPanel == 'Overall sample-independent control plot' || input.fcPanel == 'Detection P-value plot')",
                                                   helpText("These controls are used to detect bad quality samples.",
                                                            "The default thresholds are based on our experience with",
                                                            "450k data that we have seen so far."),
@@ -22,28 +22,28 @@ ui450k <- function(object)
                                                   selectInput(inputId = "colorby", label = "Highlight metadata column:", choices = colnames(object@targets), selected = "None")
                                                   ),
 
-                                 conditionalPanel(condition = "input.mainPanel == 'Filter controls' && input.fcPanel == 'MU'",
+                                 conditionalPanel(condition = "input.mainPanel == 'Filter controls' && input.fcPanel == 'rotated M vs U plot'",
                                                   sliderInput("thresholdMU", "threshold:",
                                                               min = threshold.defaults[["MU"]]-2, max = threshold.defaults[["MU"]]+2, value = threshold.defaults[["MU"]], step = 0.25)
                                                   ),
 
-                                 conditionalPanel(condition = "input.mainPanel == 'Filter controls' && input.fcPanel == 'OP'",
+                                 conditionalPanel(condition = "input.mainPanel == 'Filter controls' && input.fcPanel == 'Overall sample-dependent control plot'",
                                                   sliderInput("thresholdOP", "threshold:",
                                                               min = threshold.defaults[["OP"]]-2, max = threshold.defaults[["OP"]]+2, value = threshold.defaults[["OP"]], step = 0.25)
                                                   ),
 
-                                 conditionalPanel(condition = "input.mainPanel == 'Filter controls' && input.fcPanel == 'BS'",
+                                 conditionalPanel(condition = "input.mainPanel == 'Filter controls' && input.fcPanel == 'Bisulfite conversion control plot'",
                                                   sliderInput("thresholdBS", "threshold:",
                                                               min = threshold.defaults[["BS"]]-2, max = threshold.defaults[["BS"]]+2, value = threshold.defaults[["BS"]], step = 0.25)
                                                   ),
 
-                                 conditionalPanel(condition = "input.mainPanel == 'Filter controls' && input.fcPanel == 'HC'",
+                                 conditionalPanel(condition = "input.mainPanel == 'Filter controls' && input.fcPanel == 'Overall sample-independent control plot'",
                                                   sliderInput("thresholdHC", "threshold:",
                                                               min = threshold.defaults[["HC"]]-2, max = threshold.defaults[["HC"]]+2, value = threshold.defaults[["HC"]], step = 0.25)
 
                                                   ),
 
-                                 conditionalPanel(condition = "input.mainPanel == 'Filter controls' && input.fcPanel == 'DP'",
+                                 conditionalPanel(condition = "input.mainPanel == 'Filter controls' && input.fcPanel == 'Detection P-value plot'",
                                                   sliderInput("thresholdDP", "threshold:",
                                                               min = 0.8, max = 1, value = threshold.defaults[["DP"]], step = 0.01)
                                                   ),
@@ -83,19 +83,19 @@ ui450k <- function(object)
                               tabsetPanel(id = "mainPanel",
                                           tabPanel("Filter controls",
                                                    tabsetPanel(id = "fcPanel",
-                                                               tabPanel(title = "MU",
+                                                               tabPanel(title = "rotated M vs U plot",
                                                                         ##HTML(paste0(start, headers["MU"], end)),
                                                                         plotOutput("plotMU", width=width, height=height, clickId="clickIdMU")),
-                                                               tabPanel(title = "OP",
+                                                               tabPanel(title = "Overall sample-dependent control plot",
                                                                         ##HTML(paste0(start, headers["OP"], end)),
                                                                         plotOutput("plotOP", width=width, height=height, clickId="clickIdOP")),
-                                                               tabPanel(title = "BS",
+                                                               tabPanel(title = "Bisulfite conversion control plot",
                                                                         ##HTML(paste0(start, headers["BS"], end)),
                                                                         plotOutput("plotBS", width=width, height=height, clickId="clickIdBS")),
-                                                               tabPanel(title = "HC",
+                                                               tabPanel(title = "Overall sample-independent control plot",
                                                                         ##HTML(paste0(start, headers["HC"], end)),
                                                                         plotOutput("plotHC", width=width, height=height, clickId="clickIdHC")),
-                                                               tabPanel(title = "DP",
+                                                               tabPanel(title = "Detection P-value plot",
                                                                         ##HTML(paste0(start, headers["DP"], end)),
                                                                         plotOutput("plotDP", width=width, height=height, clickId="clickIdDP"))
                                                                )

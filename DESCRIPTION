@@ -2,8 +2,8 @@ Package: MethylAid
 Type: Package
 Title: Visual and interactive quality control of large Illumina 450k
         data sets
-Version: 0.99.5
-Date: 2014-06-06
+Version: 0.99.6
+Date: 2014-07-23
 Author: Maarten van Iterson, Elmar. Tobi, Roderick Slieker, 
         Wouter den Hollander, Rene Luijk and Bas Heijmans
 Maintainer: M. van Iterson <m.van_iterson@lumc.nl>

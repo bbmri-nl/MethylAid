@@ -1,7 +1,7 @@
 summarizeControls <- function(RGset, array)
   {
     ##control probe information
-    data(hm450.controls, package="FDb.InfiniumMethylation.hg19")
+    data(hm450.controls, package="FDb.InfiniumMethylation.hg19", envir=environment())
 
     R <- getRed(RGset)
     G <- getGreen(RGset)

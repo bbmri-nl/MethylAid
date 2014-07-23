@@ -50,15 +50,33 @@ Center,
 <H1 CLASS="western"><B>Description of the filter plots</B></H1>
 <P><SPAN STYLE="font-weight: normal">Five filter plots are proposed
 to determine bad-quality samples. A plot based on the median
-Methylated and Unmethylated log2 intensity, Type I bisufite
-conversion quality control probes, non-polymorphic sample-dependent
-quality control probes, and sample-dependent hybridization quality
-control probes and a plot representing per sample the fraction of
-probe above background using the detection p-value based on the
-negative controls. To make optimal use of the plotting area and a
-filtering out bad quality samples easier by using just one threshold
-all plots except based on the the detection p-value are 45 degrees
-rotated like the tranditional microarray MA-plots. </SPAN>
+Methylated and Unmethylated log2 intensity, non-polymorphic sample-dependent
+quality control probes, Type I bisufite conversion quality control probes, 
+sample-dependent hybridization quality control probes and a plot
+representing per sample the fraction of probes above background using the 
+detection p-value based on the negative controls. To make optimal use 
+of the plotting area and filtering out bad quality samples easier 
+by using just one threshold all plots except based on the the detection
+p-value are 45 degrees rotated like the tranditional microarray MA-plots. 
+The default thresholds are based on our experience with 450k data 
+that we have seen so far. We have obtained good results with excluding
+samples with:
+<ol>
+<li>a median Methylated and Unmethylated log2 intensity smaller than 10.5;
+ Rotated MU plot</li>
+<li>an average log2 intensity of the expected signals in green and red 
+channel of non-polymorphic controls smaller than 11.75; Overall sample-dependent
+ control plot</li>
+<li>an average log2 intensity of converted Bisulfite Type I controls 
+in green and red channel smaller than 12.75; Bisulfite converion control
+ plot</li>
+<li>an average log2 intensity of High and Low hybridization controls
+ (green channel) smaller than 13.25; Overall sample-dependent control
+ plot</li>
+<li>less 95% of their probes above the background signal;Detection 
+p-value plot</li>
+</ol> 
+</SPAN>
 </P>
 <H1 CLASS="western"><B>Description of the quality control probes</B></H1>
 <P><SPAN STYLE="font-weight: normal">Below you find a detailed

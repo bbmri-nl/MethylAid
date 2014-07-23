@@ -45,6 +45,16 @@ raw data on GEO. Furthermore, we show how the summarization can be performed in
 batches or in parallel using the \Biocpkg{BiocParallel} package which provides a
 uniform idiom for parallel computing resources.
 
+\Biocpkg{MethylAid} identifies poorly performing samples that are to be removed 
+prior to processing and further analysis of the data. Other 
+\R{}/\Bioconductor{}-packages such as, \Biocpkg{wateRmelon, minfi, methylumi, 
+lumi, COHCAP, ChAMP}, are available for processing, i.e. background, dye-bias
+and probe correction or for further analysis such as the detection of differentially 
+methylated regions. Many of these packages include quality control as well. The
+package \href{https://github.com/Jfortin1/shinyMethyl}{shinyMethyl} allows quality 
+control assessment and interactive exploration of 450k array data in a similar way 
+as \Biocpkg{MethylAid}.
+
 \section{Quick example}
 This example shows how to summarize a small set of idat files e.g. the
 summarized data fits into the available RAM. The \Biocexptpkg{minfiData}
@@ -95,7 +105,15 @@ you see and can do. Enjoy, exploring!
 \begin{figure}
    \centering
    \includegraphics[width=\textwidth]{screenshot_MethylAid}
-   \caption{Screen shot \Rpackage{MethylAid} interactive web application: The rotated M versus U plot is shown using example data from the package on 500 450k human methylation samples. The colors indicated different scan batches selected using the highlight-metadata column input selector. The dashed vertical line indicates the default filter theshold for the rotated M versus U plot.}
+   \caption{Screen shot \Rpackage{MethylAid} interactive web application: The web interface 
+     contains three parts; a panel with widgets to control the appearance of the quality 
+     control plots, tab-panels for chosing the quality control plot of interest and the 
+     interactive plotting area. When the interactive web application is launched the
+     rotated M versus U plot is shown. Here using example data from the package on 500
+     450k human methylation samples with selected ``scan\_batches'' using the input selector
+     widget ``highlight metadata column''. The different ``scan\_batches'' are indicated 
+     with different colors. The dashed-vertical line indicated the filter threshold, 
+     samples below the threshold should be removed.}
    \label{screenshot_MethylAid}
 \end{figure}
 
@@ -223,6 +241,7 @@ least set your email address in \Rcode{scripts/summarize.sh} and use the proper
 % \item Search for particular samples
 % \item Selected a sample in table and highlight
 % \item color removed samples by filter
+% \item adjustable x and y limits filter control plots
 % \end{itemize}
 
 \section{Session info}
