@@ -55,6 +55,8 @@ package \href{https://github.com/Jfortin1/shinyMethyl}{shinyMethyl} allows quali
 control assessment and interactive exploration of 450k array data in a similar way 
 as \Biocpkg{MethylAid}.
 
+\href{http://shiny.bioexp.nl/MethylAid}{http://shiny.bioexp.nl/MethylAid}
+
 \section{Quick example}
 This example shows how to summarize a small set of idat files e.g. the
 summarized data fits into the available RAM. The \Biocexptpkg{minfiData}

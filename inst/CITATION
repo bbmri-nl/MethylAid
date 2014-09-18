@@ -1,0 +1,19 @@
+itEntry(entry="article",
+         title = "MethylAid: Visual and interactive quality control of large Illumina 450k data sets",
+         author = personList(as.person("Michael Lawrence" ),
+           as.person("Maarten van Iterson" ),
+           as.person("Elmar W. Tobi" ),
+           as.person("Roderick C. Slieker" ),
+           as.person("Wouter den Hollander" ),
+           as.person("Ren\\`e Luijk" ),
+           as.person("P. Eline Slagboom" ),
+           as.person("Bastiaan T. Heijmans" )),
+         year = 2014,
+         journal = "Bioinformatics",
+         volume = "",
+         issue = "",
+         doi = "",
+         url = "",
+         textVersion = 
+         "van Iterson M, et al. (2014) MethylAid: Visual and interactive quality control of large Illumina 450k data sets. Bioinformatics")
+
