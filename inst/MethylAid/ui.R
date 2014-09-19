@@ -1,6 +1,3 @@
-library(MethylAid)
-
-data(exampleData, package="MethylAid")
 
 ##construct container for the outliers
 outliers <- matrix(FALSE, nrow=nrow(exampleData@targets), ncol=5,
