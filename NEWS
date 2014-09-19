@@ -1,1 +1,8 @@
+CHANGES IN VERSION 0.99.9
+-----------------------
 
+BUG FIXES
+
+    o fixed outlier detection using all quality
+    control plots using an initialization method
+      

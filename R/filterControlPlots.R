@@ -32,7 +32,7 @@ gcscatterplot <- function(data, x, y, col="None",
                           outliers=TRUE,
                           xlim, ylim, main)
   {
-
+       
     colors <- colorRampPalette(brewer.pal(9,"Blues"))
 
     ##because of merge can introduce "colnames.y"
@@ -100,6 +100,7 @@ rotateData <- function(data, columns)
 
 plotMU <- function(object, col, location, threshold, plotOutliers=FALSE)
   {
+    
     MU <- log2(t(object@MU))
     targets <- object@targets
     data <- merge(MU, targets, by="row.names")
@@ -116,7 +117,7 @@ plotMU <- function(object, col, location, threshold, plotOutliers=FALSE)
 
     outliers <- data$Row.names[data$Methylated <= threshold]
     setOutliers(outliers, type="MU")
-
+    
     ##plot
     gcscatterplot(data, x="Methylated", y="Unmethylated",
                   col=col, threshold=threshold, thrtype="x",

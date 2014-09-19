@@ -244,6 +244,7 @@ least set your email address in \Rcode{scripts/summarize.sh} and use the proper
 % \item Selected a sample in table and highlight
 % \item color removed samples by filter
 % \item adjustable x and y limits filter control plots
+% \item demo version on open source shiny server interfers with multiple users
 % \end{itemize}
 
 \section{Session info}

@@ -1,5 +1,7 @@
+
 server450k <- function(object)
-  {
+  {  
+    
     function(input, output, session)
       {
 
@@ -34,10 +36,13 @@ server450k <- function(object)
             return(location)
           }
 
-        thresholds <- function(tabName)
+        getThreshold <- function(tabName)
           {
+            if(missing(tabName))
+              tabName <- getTabName()
             if(is.null(tabName))
               return(NULL)
+
             threshold <- switch(tabName,
                                 MU=input$thresholdMU,
                                 OP=input$thresholdOP,
@@ -48,26 +53,50 @@ server450k <- function(object)
             return(threshold)
           }
 
+        getPlotArguments <- function()
+          {
+            ##construct plotting arguments
+            args <- list()
+            args$object <- object
+            args$col <- input$colorby ##reactive on metadata
+            args$location <- getLocation() ##reactive of mouse clicking
+            args$threshold <- getThreshold() ##reactive on threshold changes
+            args$outliers <- input$outliers ##reactive on outliers checkbox
+            args$type <- input$type ##reactive on quality control display type
+            args$plotType <- getTabName() ##reactive on tab panel switching
+            args
+          }
+
+        ##initialize to get all outliers detected
+        initialize <- function()
+          {            
+            for(plotType in c("MU", "OP", "BS", "HC", "DP"))
+              {
+                args <- getPlotArguments()
+                args$plotType <- plotType
+                args$threshold <- getThreshold(plotType)
+                plotType <- paste0("plot", plotType)
+                output[[plotType]] <- renderPlot({ do.call(qcplot, args) })
+              }
+          }
+        
         ##create plot
-        observe({
+        observe({ 
+         
+          ##initialize to get all outliers detected do this only once
+          if(!exists("initialized", envir=globalenv()))
+            {
+              initialize()
+              assign("initialized", TRUE, envir=globalenv())
+            }
 
-          tabName <- getTabName() ##
-
-          ##construct plotting arguments
-          args <- list()
-          args$object <- object
-
-          args$col <- input$colorby ##reactive on
-          args$location <- getLocation() ##reactive of mouse clicking
-          args$threshold <- thresholds(tabName) ##reactive on threshold changes
-          args$outliers <- input$outliers ##reactive on outliers checkbox
-          args$type <- input$type ##reactive on quality control display type
-          args$plotType <- tabName ##reactive on tab panel switching
+          args <- getPlotArguments()
+          plotType <- args$plotType
 
           ##optionally save plot
           output$save <- downloadHandler(
                                          filename=function() {
-                                           paste0("plot", tabName, ".pdf")
+                                           paste0("plot", plotType, ".pdf")
                                          },
                                          content=function(file) {
                                            message(paste("Saving ..."))
@@ -83,9 +112,8 @@ server450k <- function(object)
                                          )
 
           ##do the plotting
-          plotType <- paste0("plot", tabName)
+          plotType <- paste0("plot", plotType)
           output[[plotType]] <- renderPlot({ do.call(qcplot, args) })
-
         })
 
 

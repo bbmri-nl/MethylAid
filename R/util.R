@@ -16,7 +16,7 @@ qcplot <- function(object, plotType, col,
   {
 
     type <- match.arg(type)
-
+    
     p <- if(plotType == "MU")
       plotMU(object, col, location, threshold, outliers)
     else if(plotType == "OP")
@@ -48,20 +48,26 @@ setHighlight <- function(x, y, location)
     y <- (y - mean(y, na.rm=TRUE))/sd(y, na.rm=TRUE)
 
     d <- sqrt((x - location$x)^2 + (y - location$y)^2)
-    ##clicked in empty space remove highlightde
+    ##clicked in empty space remove highlighted
     if(min(d, na.rm=TRUE) >
        0.05*sqrt(diff(range(x, na.rm=TRUE))^2 + diff(range(y, na.rm=TRUE))^2))
 
       {
         if(exists("highlight", envir=globalenv()))
           rm(list="highlight", envir=globalenv())
+        
       }
     else
       {
         id <- which.min(d)
         highlight <- names(x)[id]
-        assign("highlight", highlight, envir=globalenv())
+        assign("highlight", highlight, envir=globalenv())        
       }
+  }
+
+getHighLightIndex <- function()
+  {
+    get("highlight", envir=globalenv())
   }
 
 setOutliers <- function(outliers, type)

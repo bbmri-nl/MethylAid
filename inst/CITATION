@@ -1,4 +1,4 @@
-itEntry(entry="article",
+citEntry(entry="article",
          title = "MethylAid: Visual and interactive quality control of large Illumina 450k data sets",
          author = personList(as.person("Michael Lawrence" ),
            as.person("Maarten van Iterson" ),

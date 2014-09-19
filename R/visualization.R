@@ -29,8 +29,8 @@ setMethod("visualize", signature="summarizedData",
             outliers <- matrix(FALSE, nrow=nrow(object@targets), ncol=5,
                                dimnames=list(row.names(object@targets),
                                  c("MU", "BS", "OP", "HC", "DP")))
-            assign("outliers", outliers, envir=globalenv())
-
+            assign("outliers", outliers, envir=globalenv())           
+            
             app <- list(ui=ui450k(object), server=server450k(object))
             runApp(app)
 
@@ -38,7 +38,7 @@ setMethod("visualize", signature="summarizedData",
             outliers <- get("outliers", envir=globalenv())
 
             ##clear global envirnoment
-            for(obj in c("outliers", "highlight"))
+            for(obj in c("outliers", "highlight", "initialized"))
               {
                 if(exists(obj, envir=globalenv()))
                   rm(list=obj, envir=globalenv())
