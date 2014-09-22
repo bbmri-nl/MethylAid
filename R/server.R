@@ -1,10 +1,64 @@
 
-server450k <- function(object)
-  {  
+##initializer
+initialize <- function(object, output)
+  {
+    ##cat("initialize...\n")
     
-    function(input, output, session)
+    ##construct container for the outliers
+    outliers <- matrix(FALSE, nrow=nrow(object@targets), ncol=5,
+                       dimnames=list(row.names(object@targets),
+                         names(threshold.defaults)))   
+    
+    assign("outliers", outliers, envir = globalenv())     
+    
+    args <- list()
+    args$object <- object
+    args$col <- "None"
+    args$location <- list(x=NULL, y=NULL)
+    args$outliers <- FALSE
+    args$type <- NULL
+    
+    for(plotType in names(threshold.defaults))
       {
+        args$plotType <- plotType
+        args$threshold <- threshold.defaults[[plotType]]
+        plotType <- paste0("plot", plotType)
+        output[[plotType]] <- renderPlot({ do.call(qcplot, args) })
+      }   
+  }
 
+##finalizer
+finalize <- function(object)
+  {
+    ##cat("finalize...\n") 
+
+    ##get outliers 
+    outliers <- get("outliers", envir = globalenv())
+    
+    ##clear global envirnoment
+    for(obj in c("outliers", "highlight"))
+      {
+        if(exists(obj, envir = globalenv()))
+          rm(list=obj, envir = globalenv())
+      }   
+    
+    ##return outliers with information from targets file
+    targets <- object@targets
+    outliers <- targets[rownames(targets) %in%
+                        rownames(outliers[rowSums(outliers) > 0,,
+                                          drop=FALSE]),]
+
+    return(outliers)
+  }
+
+server450k <- function(object)
+  {
+
+    function(input, output, session)
+      {       
+        ##initialize to get all outliers detected do this only once
+        initialize(object, output)     
+                      
         getTabName <- function()
           {
             switch(input$mainPanel,
@@ -65,31 +119,11 @@ server450k <- function(object)
             args$type <- input$type ##reactive on quality control display type
             args$plotType <- getTabName() ##reactive on tab panel switching
             args
-          }
-
-        ##initialize to get all outliers detected
-        initialize <- function()
-          {            
-            for(plotType in c("MU", "OP", "BS", "HC", "DP"))
-              {
-                args <- getPlotArguments()
-                args$plotType <- plotType
-                args$threshold <- getThreshold(plotType)
-                plotType <- paste0("plot", plotType)
-                output[[plotType]] <- renderPlot({ do.call(qcplot, args) })
-              }
-          }
+          }      
         
         ##create plot
-        observe({ 
-         
-          ##initialize to get all outliers detected do this only once
-          if(!exists("initialized", envir=globalenv()))
-            {
-              initialize()
-              assign("initialized", TRUE, envir=globalenv())
-            }
-
+        observe({
+          
           args <- getPlotArguments()
           plotType <- args$plotType
 
@@ -116,12 +150,12 @@ server450k <- function(object)
           output[[plotType]] <- renderPlot({ do.call(qcplot, args) })
         })
 
-
         ##show outliers
         output$Outliers <- renderDataTable({
-          ##message("Update data table") ##just for debugging
-          dt <- get("outliers", envir=globalenv())
-
+          
+          thrs <- getThreshold() ##reactive on threshold changes
+          
+          dt <- get("outliers", envir = globalenv())
           if(sum(rowSums(dt) > 0) == 0)
             return(NULL)
 
@@ -132,8 +166,9 @@ server450k <- function(object)
         ##Stop App
         observe({
           if (input$exit == 0)
-            return()
-          stopApp(input$cutoff)
+            return(NULL)
+          stopApp(returnValue=finalize(object))
         })
+        
       }
   }

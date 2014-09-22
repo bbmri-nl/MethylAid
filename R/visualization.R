@@ -24,30 +24,7 @@ setGeneric("visualize",
 ##' }
 setMethod("visualize", signature="summarizedData",
           function(object)
-          {
-            ##construct container for the outliers
-            outliers <- matrix(FALSE, nrow=nrow(object@targets), ncol=5,
-                               dimnames=list(row.names(object@targets),
-                                 c("MU", "BS", "OP", "HC", "DP")))
-            assign("outliers", outliers, envir=globalenv())           
-            
-            app <- list(ui=ui450k(object), server=server450k(object))
-            runApp(app)
-
-            ##get outliers for return value
-            outliers <- get("outliers", envir=globalenv())
-
-            ##clear global envirnoment
-            for(obj in c("outliers", "highlight", "initialized"))
-              {
-                if(exists(obj, envir=globalenv()))
-                  rm(list=obj, envir=globalenv())
-              }
-
-            ##return outliers with information from targets file
-            targets <- object@targets
-            outliers <- targets[rownames(targets) %in%
-                                rownames(outliers[rowSums(outliers) > 0,,
-                                                  drop=FALSE]),]
-            invisible(outliers)
+          {                        
+            app <- list(ui=ui450k(object), server=server450k(object))                                   
+            invisible(runApp(app))
           })

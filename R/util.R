@@ -16,7 +16,7 @@ qcplot <- function(object, plotType, col,
   {
 
     type <- match.arg(type)
-    
+
     p <- if(plotType == "MU")
       plotMU(object, col, location, threshold, outliers)
     else if(plotType == "OP")
@@ -55,13 +55,13 @@ setHighlight <- function(x, y, location)
       {
         if(exists("highlight", envir=globalenv()))
           rm(list="highlight", envir=globalenv())
-        
+
       }
     else
       {
         id <- which.min(d)
         highlight <- names(x)[id]
-        assign("highlight", highlight, envir=globalenv())        
+        assign("highlight", highlight, envir=globalenv())
       }
   }
 
@@ -72,22 +72,23 @@ getHighLightIndex <- function()
 
 setOutliers <- function(outliers, type)
 {
-  out <- get("outliers", envir=globalenv())
+  if(!exists("outliers", envir = globalenv()))
+    return(NULL)
+  
+  out <- get("outliers", envir = globalenv())
   out[, type] <- FALSE ##reset
   out[, type] <- rownames(out) %in% outliers
-  assign("outliers", out, envir=globalenv())
+  assign("outliers", out, envir = globalenv())
 }
 
 getOutliers <- function(sampleIds)
   {
-    if(exists("outliers", envir=globalenv()))
-      {
-        outliers <- get("outliers", envir=globalenv())
-        outliers <- rownames(outliers[rowSums(outliers) > 0,, drop=FALSE])
-        return(sampleIds %in% outliers)
-      }
-    else
+    if(!exists("outliers", envir = globalenv()))
       return(FALSE)
+    
+    outliers <- get("outliers", envir = globalenv())     
+    outliers <- rownames(outliers[rowSums(outliers) > 0,, drop=FALSE])
+    sampleIds %in% outliers
   }
 
 prepareData <- function(object)
@@ -143,3 +144,4 @@ detectionP <- function (rgSet, type="m+u", ...)
     }
     detP
   }
+
