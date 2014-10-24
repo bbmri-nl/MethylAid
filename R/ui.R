@@ -56,7 +56,7 @@ ui450k <- function(object)
                                                            "dinucleotides, the performance of the control oligos does",
                                                            "not depend on the methylation status of the template DNA."),
                                                   br(), br(),
-                                                  selectInput(inputId = "type", label = "plot type:", choices = c("boxplot", "sample", "scatter"), selected = "sample")
+                                                  selectInput(inputId = "typeSdcPanel", label = "plot type:", choices = c("boxplot", "sample", "scatter"), selected = "sample")
                                                   ),
 
 
@@ -64,7 +64,7 @@ ui450k <- function(object)
                                                   helpText("Sample-independent controls evaluate the performance of",
                                                            "specific steps in the process flow."),
                                                   br(), br(),
-                                                  selectInput(inputId = "type", label = "plot type:", choices = c("boxplot", "sample", "scatter"), selected = "sample")
+                                                  selectInput(inputId = "typeSicPanel", label = "plot type:", choices = c("boxplot", "sample", "scatter"), selected = "sample")
                                                   ),
 
                                  conditionalPanel(condition = "input.mainPanel == 'Filter controls' || input.mainPanel ==  'Sample-dependent controls' || input.mainPanel == 'Sample-independent controls'",

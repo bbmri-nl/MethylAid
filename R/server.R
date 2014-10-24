@@ -107,6 +107,15 @@ server450k <- function(object)
             return(threshold)
           }
 
+        getType <- function()
+          {
+            switch(input$mainPanel,
+                   `Filter controls` = "scatter",
+                   `Sample-dependent controls`= input$typeSdcPanel,
+                   `Sample-independent controls`= input$typeSicPanel,
+                   "scatter")                   
+          }
+
         getPlotArguments <- function()
           {
             ##construct plotting arguments
@@ -116,7 +125,7 @@ server450k <- function(object)
             args$location <- getLocation() ##reactive of mouse clicking
             args$threshold <- getThreshold() ##reactive on threshold changes
             args$outliers <- input$outliers ##reactive on outliers checkbox
-            args$type <- input$type ##reactive on quality control display type
+            args$type <- getType() ##reactive on quality control display type
             args$plotType <- getTabName() ##reactive on tab panel switching
             args
           }      

@@ -6,3 +6,14 @@ BUG FIXES
     o fixed outlier detection using all quality
     control plots using an initialization method
       
+CHANGES IN VERSION 1.0.1
+-----------------------
+
+BUG FIXES
+
+    o fixed missing reactivity on
+    plot type of the sample-independent
+    control plots
+    o adjusted the size of save pdfs
+     
+ 
