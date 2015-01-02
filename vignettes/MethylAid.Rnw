@@ -30,7 +30,7 @@ intensities from IDAT files can be done in batches and/or in parallel to reduce
 memory load and/or overcome long run-times. It requires two function calls in 
 going from IDAT files to launch the interactive web application; 
 \Rfunction{summarize} and \Rfunction{visualize}. For more information see 
-van Iterson \emph{et al.} \cite{iterson2014}.
+van Iterson \emph{et al.} \cite{Iterson2014}.
 
 To show the utility of \Biocpkg{MethylAid}, we first show a quick example using
 a small set of idat files taken from the \Biocexptpkg{minfiData} package. A
