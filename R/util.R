@@ -109,22 +109,21 @@ prepareData <- function(object)
   }
 
 ##Taken from minfi
-##Added: ellipsis to allow for argument na.rm
+##Added: argument na.rm
 ##       as.matrix in case the RGset contains only one sample
-detectionP <- function (rgSet, type="m+u", ...)
-  {
+detectionP <- function (rgSet, type = "m+u", na.rm = FALSE) {
     locusNames <- getManifestInfo(rgSet, "locusNames")
     detP <- matrix(NA_real_, ncol=ncol(rgSet), nrow=length(locusNames),
                    dimnames=list(locusNames, sampleNames(rgSet)))
     controlIdx <- getControlAddress(rgSet, controlType="NEGATIVE")
     r <- getRed(rgSet)
     rBg <- r[controlIdx, ]
-    rMu <- colMedians(as.matrix(rBg), ...)
-    rSd <- colMads(as.matrix(rBg), ...)
+    rMu <- colMedians(as.matrix(rBg), na.rm = na.rm)
+    rSd <- colMads(as.matrix(rBg), na.rm = na.rm)
     g <- getGreen(rgSet)
     gBg <- g[controlIdx, ]
-    gMu <- colMedians(as.matrix(gBg), ...)
-    gSd <- colMads(as.matrix(gBg), ...)
+    gMu <- colMedians(as.matrix(gBg), na.rm = na.rm)
+    gSd <- colMads(as.matrix(gBg), na.rm = na.rm)
     TypeII <- getProbeInfo(rgSet, type="II")
     TypeI.Red <- getProbeInfo(rgSet, type="I-Red")
     TypeI.Green <- getProbeInfo(rgSet, type="I-Green")

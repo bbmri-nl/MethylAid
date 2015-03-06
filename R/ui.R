@@ -12,7 +12,7 @@ ui450k <- function(object)
     start = "<br> <p style=\"width:800px;text-align:justify\"><span style=\"color:#000000;font-size:16px\">"
       end = "</span></p><br><br>"
 
-    pageWithSidebar(headerPanel(paste("MethylAid(", package.version("MethylAid"),"): interactive visualization of Illumina 450k Methylation array data", sep="")),
+    pageWithSidebar(headerPanel(paste("MethylAid(", packageVersion("MethylAid"),"): interactive visualization of Illumina 450k Methylation array data", sep="")),
 
                     sidebarPanel(conditionalPanel(condition = "input.mainPanel == 'Filter controls' && (input.fcPanel == 'rotated M vs U plot' || input.fcPanel == 'Overall sample-dependent control plot' || input.fcPanel == 'Bisulfite conversion control plot' || input.fcPanel == 'Overall sample-independent control plot' || input.fcPanel == 'Detection P-value plot')",
                                                   helpText("These controls are used to detect bad quality samples.",

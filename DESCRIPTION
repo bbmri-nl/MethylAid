@@ -2,8 +2,8 @@ Package: MethylAid
 Type: Package
 Title: Visual and interactive quality control of large Illumina 450k
         data sets
-Version: 1.1.0
-Date: 2014-09-22
+Version: 1.1.1
+Date: 2015-03-06
 Author: Maarten van Iterson, Elmar. Tobi, Roderick Slieker, 
         Wouter den Hollander, Rene Luijk and Bas Heijmans
 Maintainer: M. van Iterson <m.van_iterson@lumc.nl>
@@ -18,10 +18,27 @@ Description: A visual and interactive web application using RStudio's
 URL: http://shiny.bioexp.nl/MethylAid
 License: GPL (>= 2)
 VignetteBuilder: knitr
-biocViews: DNAMethylation, MethylationArray, Microarray, TwoChannel, 
-           QualityControl, Visualization, GUI
+biocViews: DNAMethylation, 
+           MethylationArray, 
+           Microarray, 
+           TwoChannel, 
+           QualityControl, 
+           BatchEffect,
+           Visualization, 
+           GUI
 Depends: R (>= 3.0)
-Imports: methods, matrixStats, BiocParallel, shiny, ggplot2,
-        RColorBrewer, minfi, IlluminaHumanMethylation450kmanifest,
-        FDb.InfiniumMethylation.hg19
-Suggests: BiocStyle, RUnit, BiocGenerics, minfiData, knitr
+Imports: Biobase, 
+         BiocParallel,
+         FDb.InfiniumMethylation.hg19,
+         ggplot2,
+         IlluminaHumanMethylation450kmanifest,
+         matrixStats, 
+         minfi, 
+         methods,          
+         RColorBrewer, 
+         shiny
+Suggests: BiocGenerics, 
+          BiocStyle,           
+          knitr,
+          minfiData, 
+          RUnit

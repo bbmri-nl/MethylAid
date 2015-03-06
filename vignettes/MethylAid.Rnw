@@ -22,6 +22,8 @@ BiocStyle::latex()
 
 \maketitle
 
+\tableofcontents
+
 \section{Introduction}
 
 \Biocpkg{MethylAid} is specially designed for quality control of large sets of
@@ -57,13 +59,14 @@ as \Biocpkg{MethylAid}.
 
 We have a demo running at \href{http://shiny.bioexp.nl/MethylAid}{http://shiny.bioexp.nl/MethylAid} using the example-data of the package.
 
-\section{Quick example}
+\section{Quick start}
 This example shows how to summarize a small set of idat files e.g. the
-summarized data fits into the available RAM. The \Biocexptpkg{minfiData}
+summarized data fits into the available RAM. The \Biocexptpkg{minfiData}-package
 provides such a set. The package contains 450k DNA methylation data on 6 samples
-across 2 groups. Since, \Biocpkg{MethylAid} uses internally the
-\Biocpkg{minfi}\cite{Aryee2014} function \Rfunction{read.450k.exp}, target
-information should be provided in a similar way.
+across 2 groups. Since, \Biocpkg{MethylAid} uses internally the function 
+\Rfunction{read.450k.exp} from the \Biocpkg{minfi}-package\cite{Aryee2014}, target
+information should be provided in a similar way as is done when using the 
+\Biocpkg{minfi}-package.
 
 <<minfiDatatargets, cache=TRUE, message=FALSE>>=
 library(MethylAid)
@@ -86,7 +89,7 @@ visualize(data)
 \bioccomment{\Rfunction{visualize} can only be called interactively from within
 a \R{} session.}
 
-\section{Presummarized data example}
+\section{Example using presummarized 450k data}
 
 For those who directly want to explore the web application we have presummarized
 450k data on 500 samples.
@@ -102,7 +105,7 @@ visualize(exampleData)
 
 When your webbrowser opens you should see something like Figure
 \ref{screenshot_MethylAid}. In the `About` panel a description is given of what
-you see and can do. Enjoy, exploring!
+you see and can do.
 
 \begin{figure}
    \centering
@@ -119,7 +122,7 @@ you see and can do. Enjoy, exploring!
    \label{screenshot_MethylAid}
 \end{figure}
 
-\section{Using 450k data downloaded from The Cancer Genome Atlas}
+\section{Example using 450k data downloaded from The Cancer Genome Atlas}
 
 The Cancer Genome Atlas (\url{http://cancergenome.nih.gov/}) provides a valuable
 source of genomic data of various types of different cancers. Here all Breast
@@ -127,8 +130,8 @@ invasive carcinoma (BRCA) 450k level 1 DNA methylation data were download from
 the TCGA Data Portal. A targets file can be constructed from the sdrf file but
 some preprocessing is necessary. The following code chunk show how to make a
 minimal targets file from a sdrf file. There is also a check to see if all files
-a present otherwise these will be removed from the targets file. \fixme{In the
-  future this might be added as an internal check.}
+are present otherwise these will be removed from the targets file. \fixme{In the
+future this might be added as an internal check.}
 
 <<tcgatargets, eval=FALSE>>=
 sdrfFile <- list.files(pattern="sdrf", full.name=TRUE)
@@ -196,7 +199,7 @@ batches to overcome memory problems e.g. when too many idat files are read at
 once. Just provide the option \Rcode{batchSize} to the \Rfunction{summarize}
 function as we did in the previous example. Too overcome long run-times
 summarization can be performed in parallel as well using various computing
-resources facilitated by the \Biocpkg{BiocParallel} package.
+resource facilitated by the \Biocpkg{BiocParallel} package.
 
 The \Rfunction{summarize} accepts a \Rcode{bpparam} argument
 e.g. \Robject{MulticoreParam} (\bioccomment{unfortunately this is not available

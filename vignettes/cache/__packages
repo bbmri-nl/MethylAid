@@ -21,3 +21,5 @@ minfiData
 S4Vectors
 shiny
 XVector
+DBI
+RSQLite
