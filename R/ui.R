@@ -1,9 +1,3 @@
-threshold.defaults <- list(MU = 10.50,
-                           OP = 11.75,
-                           BS = 12.75,
-                           HC = 13.25,
-                           DP = 0.95)
-
 ui450k <- function(object)
   {
     width = "100%"
@@ -21,33 +15,7 @@ ui450k <- function(object)
                                                   br(), br(),
                                                   selectInput(inputId = "colorby", label = "Highlight metadata column:", choices = colnames(object@targets), selected = "None")
                                                   ),
-
-                                 conditionalPanel(condition = "input.mainPanel == 'Filter controls' && input.fcPanel == 'rotated M vs U plot'",
-                                                  sliderInput("thresholdMU", "threshold:",
-                                                              min = threshold.defaults[["MU"]]-2, max = threshold.defaults[["MU"]]+2, value = threshold.defaults[["MU"]], step = 0.25)
-                                                  ),
-
-                                 conditionalPanel(condition = "input.mainPanel == 'Filter controls' && input.fcPanel == 'Overall sample-dependent control plot'",
-                                                  sliderInput("thresholdOP", "threshold:",
-                                                              min = threshold.defaults[["OP"]]-2, max = threshold.defaults[["OP"]]+2, value = threshold.defaults[["OP"]], step = 0.25)
-                                                  ),
-
-                                 conditionalPanel(condition = "input.mainPanel == 'Filter controls' && input.fcPanel == 'Bisulfite conversion control plot'",
-                                                  sliderInput("thresholdBS", "threshold:",
-                                                              min = threshold.defaults[["BS"]]-2, max = threshold.defaults[["BS"]]+2, value = threshold.defaults[["BS"]], step = 0.25)
-                                                  ),
-
-                                 conditionalPanel(condition = "input.mainPanel == 'Filter controls' && input.fcPanel == 'Overall sample-independent control plot'",
-                                                  sliderInput("thresholdHC", "threshold:",
-                                                              min = threshold.defaults[["HC"]]-2, max = threshold.defaults[["HC"]]+2, value = threshold.defaults[["HC"]], step = 0.25)
-
-                                                  ),
-
-                                 conditionalPanel(condition = "input.mainPanel == 'Filter controls' && input.fcPanel == 'Detection P-value plot'",
-                                                  sliderInput("thresholdDP", "threshold:",
-                                                              min = 0.8, max = 1, value = threshold.defaults[["DP"]], step = 0.01)
-                                                  ),
-
+                                 
                                  conditionalPanel(condition = "input.mainPanel ==  'Sample-dependent controls' && (input.sdcPanel == 'BSI' || input.sdcPanel == 'BSII' || input.sdcPanel == 'SPI' || input.sdcPanel == 'SPII' || input.sdcPanel == 'NP')",
                                                   helpText("The sample-dependent controls can be used to evaluate",
                                                            "performance across samples. These control oligos are",
@@ -56,15 +24,14 @@ ui450k <- function(object)
                                                            "dinucleotides, the performance of the control oligos does",
                                                            "not depend on the methylation status of the template DNA."),
                                                   br(), br(),
-                                                  selectInput(inputId = "type", label = "plot type:", choices = c("boxplot", "sample", "scatter"), selected = "sample")
+                                                  selectInput(inputId = "typeSdcPanel", label = "plot type:", choices = c("boxplot", "sample", "scatter"), selected = "sample")
                                                   ),
-
 
                                  conditionalPanel(condition = "input.mainPanel == 'Sample-independent controls' && (input.sicPanel == 'SC' || input.sicPanel == 'TR' || input.sicPanel == 'EC' || input.sicPanel == 'HYB')",
                                                   helpText("Sample-independent controls evaluate the performance of",
                                                            "specific steps in the process flow."),
                                                   br(), br(),
-                                                  selectInput(inputId = "type", label = "plot type:", choices = c("boxplot", "sample", "scatter"), selected = "sample")
+                                                  selectInput(inputId = "typeSicPanel", label = "plot type:", choices = c("boxplot", "sample", "scatter"), selected = "sample")
                                                   ),
 
                                  conditionalPanel(condition = "input.mainPanel == 'Filter controls' || input.mainPanel ==  'Sample-dependent controls' || input.mainPanel == 'Sample-independent controls'",

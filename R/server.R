@@ -1,47 +1,46 @@
-
 ##initializer
-initialize <- function(object, output)
+initialize <- function(object, output, thresholds)
   {
     ##cat("initialize...\n")
-    
+
     ##construct container for the outliers
     outliers <- matrix(FALSE, nrow=nrow(object@targets), ncol=5,
                        dimnames=list(row.names(object@targets),
-                         names(threshold.defaults)))   
-    
-    assign("outliers", outliers, envir = globalenv())     
-    
+                         names(thresholds)))
+
+    assign("outliers", outliers, envir = globalenv())
+
     args <- list()
     args$object <- object
     args$col <- "None"
     args$location <- list(x=NULL, y=NULL)
     args$outliers <- FALSE
     args$type <- NULL
-    
-    for(plotType in names(threshold.defaults))
+
+    for(plotType in names(thresholds))
       {
         args$plotType <- plotType
-        args$threshold <- threshold.defaults[[plotType]]
+        args$threshold <- thresholds[[plotType]]
         plotType <- paste0("plot", plotType)
         output[[plotType]] <- renderPlot({ do.call(qcplot, args) })
-      }   
+      }
   }
 
 ##finalizer
 finalize <- function(object)
   {
-    ##cat("finalize...\n") 
+    ##cat("finalize...\n")
 
-    ##get outliers 
+    ##get outliers
     outliers <- get("outliers", envir = globalenv())
-    
+
     ##clear global envirnoment
     for(obj in c("outliers", "highlight"))
       {
         if(exists(obj, envir = globalenv()))
           rm(list=obj, envir = globalenv())
-      }   
-    
+      }
+
     ##return outliers with information from targets file
     targets <- object@targets
     outliers <- targets[rownames(targets) %in%
@@ -51,14 +50,14 @@ finalize <- function(object)
     return(outliers)
   }
 
-server450k <- function(object)
+server450k <- function(object, thresholds)
   {
 
     function(input, output, session)
-      {       
+      {
         ##initialize to get all outliers detected do this only once
-        initialize(object, output)     
-                      
+        initialize(object, output, thresholds)
+
         getTabName <- function()
           {
             switch(input$mainPanel,
@@ -90,21 +89,13 @@ server450k <- function(object)
             return(location)
           }
 
-        getThreshold <- function(tabName)
+        getType <- function()
           {
-            if(missing(tabName))
-              tabName <- getTabName()
-            if(is.null(tabName))
-              return(NULL)
-
-            threshold <- switch(tabName,
-                                MU=input$thresholdMU,
-                                OP=input$thresholdOP,
-                                BS=input$thresholdBS,
-                                HC=input$thresholdHC,
-                                DP=input$thresholdDP,
-                                NULL)
-            return(threshold)
+            switch(input$mainPanel,
+                   `Filter controls` = "scatter",
+                   `Sample-dependent controls`= input$typeSdcPanel,
+                   `Sample-independent controls`= input$typeSicPanel,
+                   "scatter")
           }
 
         getPlotArguments <- function()
@@ -114,16 +105,16 @@ server450k <- function(object)
             args$object <- object
             args$col <- input$colorby ##reactive on metadata
             args$location <- getLocation() ##reactive of mouse clicking
-            args$threshold <- getThreshold() ##reactive on threshold changes
+            args$threshold <- thresholds[[getTabName()]]
             args$outliers <- input$outliers ##reactive on outliers checkbox
-            args$type <- input$type ##reactive on quality control display type
+            args$type <- getType() ##reactive on quality control display type
             args$plotType <- getTabName() ##reactive on tab panel switching
             args
-          }      
-        
+          }
+
         ##create plot
         observe({
-          
+
           args <- getPlotArguments()
           plotType <- args$plotType
 
@@ -152,9 +143,7 @@ server450k <- function(object)
 
         ##show outliers
         output$Outliers <- renderDataTable({
-          
-          thrs <- getThreshold() ##reactive on threshold changes
-          
+
           dt <- get("outliers", envir = globalenv())
           if(sum(rowSums(dt) > 0) == 0)
             return(NULL)
@@ -169,6 +158,6 @@ server450k <- function(object)
             return(NULL)
           stopApp(returnValue=finalize(object))
         })
-        
+
       }
   }

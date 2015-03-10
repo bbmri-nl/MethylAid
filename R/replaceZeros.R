@@ -11,8 +11,7 @@ replaceZero <- function(RGset)
 
     ##construct new RGChannelSet
     pd <- pData(RGset)
-    meta <-
-      varMetadata(RGset)
+    meta <- varMetadata(RGset)
     RGset <- RGChannelSet(Green = Green, Red = Red,
                           pheno = AnnotatedDataFrame(pd, meta))
     RGset@annotation =  "IlluminaHumanMethylation450k"

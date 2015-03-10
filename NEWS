@@ -6,3 +6,10 @@ BUG FIXES
     o fixed outlier detection using all quality
     control plots using an initialization method
       
+CHANGES IN VERSION 1.1.2
+-----------------------
+
+    o moved filter thresholds from shiny application
+    to R as argument to visualize  
+      
+
