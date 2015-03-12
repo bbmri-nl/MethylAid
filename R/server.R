@@ -1,5 +1,5 @@
 ##initializer
-initialize <- function(object, output, thresholds)
+initialize <- function(object, output, thresholds, background)
   {
     ##cat("initialize...\n")
 
@@ -17,6 +17,7 @@ initialize <- function(object, output, thresholds)
     args$outliers <- FALSE
     args$type <- NULL
 
+    ##detect outliers
     for(plotType in names(thresholds))
       {
         args$plotType <- plotType
@@ -24,6 +25,11 @@ initialize <- function(object, output, thresholds)
         plotType <- paste0("plot", plotType)
         output[[plotType]] <- renderPlot({ do.call(qcplot, args) })
       }
+
+    ##generate background data and make it accesible for the plotting functions
+    if(!is.null(background))
+      assign("background", as.background(background), envir = globalenv())
+      
   }
 
 ##finalizer
@@ -35,7 +41,7 @@ finalize <- function(object)
     outliers <- get("outliers", envir = globalenv())
 
     ##clear global envirnoment
-    for(obj in c("outliers", "highlight"))
+    for(obj in c("outliers", "highlight", "background"))
       {
         if(exists(obj, envir = globalenv()))
           rm(list=obj, envir = globalenv())
@@ -50,13 +56,13 @@ finalize <- function(object)
     return(outliers)
   }
 
-server450k <- function(object, thresholds)
+server450k <- function(object, thresholds, background)
   {
 
     function(input, output, session)
       {
         ##initialize to get all outliers detected do this only once
-        initialize(object, output, thresholds)
+        initialize(object, output, thresholds, background)
 
         getTabName <- function()
           {
@@ -98,6 +104,14 @@ server450k <- function(object, thresholds)
                    "scatter")
           }
 
+        getBackground <- function()
+          {
+            if(exists("background", envir=globalenv()))
+              return(input$background)
+            else
+              return(FALSE)
+          }
+
         getPlotArguments <- function()
           {
             ##construct plotting arguments
@@ -108,7 +122,8 @@ server450k <- function(object, thresholds)
             args$threshold <- thresholds[[getTabName()]]
             args$outliers <- input$outliers ##reactive on outliers checkbox
             args$type <- getType() ##reactive on quality control display type
-            args$plotType <- getTabName() ##reactive on tab panel switching
+            args$plotType <- getTabName() ##reactive on tab panel switching            
+            args$background <- getBackground()
             args
           }
 

@@ -16,4 +16,8 @@ print short summary summarizedData object
 \description{
 show method for summarized 450k Illumina Human Methylation data
 }
+\examples{
+data(exampleData)
+exampleData
+}
 

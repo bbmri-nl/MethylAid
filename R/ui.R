@@ -15,7 +15,7 @@ ui450k <- function(object)
                                                   br(), br(),
                                                   selectInput(inputId = "colorby", label = "Highlight metadata column:", choices = colnames(object@targets), selected = "None")
                                                   ),
-                                 
+
                                  conditionalPanel(condition = "input.mainPanel ==  'Sample-dependent controls' && (input.sdcPanel == 'BSI' || input.sdcPanel == 'BSII' || input.sdcPanel == 'SPI' || input.sdcPanel == 'SPII' || input.sdcPanel == 'NP')",
                                                   helpText("The sample-dependent controls can be used to evaluate",
                                                            "performance across samples. These control oligos are",
@@ -37,6 +37,7 @@ ui450k <- function(object)
                                  conditionalPanel(condition = "input.mainPanel == 'Filter controls' || input.mainPanel ==  'Sample-dependent controls' || input.mainPanel == 'Sample-independent controls'",
 
                                                   checkboxInput("outliers", "Show outliers", value = FALSE),
+                                                  checkboxInput("background", label = "Show background data", value = FALSE),
                                                   downloadLink("save", "Save Plot")
                                                   ),
 

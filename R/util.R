@@ -12,21 +12,21 @@ qcProbes=list(
 
 qcplot <- function(object, plotType, col,
                    type=c("boxplot", "sample", "scatter"),
-                   location=NULL, threshold=NULL, outliers)
+                   location=NULL, threshold=NULL, outliers, background=FALSE)
   {
 
     type <- match.arg(type)
 
     p <- if(plotType == "MU")
-      plotMU(object, col, location, threshold, outliers)
+      plotMU(object, col, location, threshold, outliers, background)
     else if(plotType == "OP")
-      plotOP(object, col, location, threshold, outliers)
+      plotOP(object, col, location, threshold, outliers, background)
     else if(plotType == "BS")
-      plotBS(object, col, location, threshold, outliers)
+      plotBS(object, col, location, threshold, outliers, background)
     else if(plotType == "HC")
-      plotHC(object, col, location, threshold, outliers)
+      plotHC(object, col, location, threshold, outliers, background)
     else if(plotType == "DP")
-      plotDP(object, col, location, threshold, outliers)
+      plotDP(object, col, location, threshold, outliers, background)
     else ##if "BSI", "BSII", "HYB", "NP", "EC", "NC", "SC", "TR", "SPI", "SPII"
       switch(type,
              scatter=qcscatterplot(object, plotType, outliers),

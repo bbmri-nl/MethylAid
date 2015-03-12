@@ -1,10 +1,26 @@
-ggplot2base <- function(x, y, ...)
+ggplot2base <- function(x, y, bg, ...)
   {
     op <- par(mar=c(5, 5, 3, 0), bg="white")
-    plot(x, y, xaxt="n", yaxt="n", pch=16, bty="n", type="p", ...)
+    plot(x, y, xaxt="n", yaxt="n", pch=16, bty="n", type="p",...)
     rect(par("usr")[1], par("usr")[3], par("usr")[2], par("usr")[4],
          col="grey90",
          border=NA)
+
+    ##add smooth background
+    if(!is.null(bg))
+      {
+        
+        ## smoothScatter(bg$x, bg$y, colramp = colorRampPalette(c("grey90", "blue")),
+        ##                nrpoints=0, nbin=256, add=TRUE,
+        ##                xaxt="n", yaxt="n", postPlotHook=NULL, bty="n", ...)       
+        
+        h <- hexbin(bg$x, bg$y)
+        vps <- baseViewports()
+        pushViewport(vps$inner, vps$figure, vps$plot)
+        grid.hexagons(h, colramp = colorRampPalette(blues9[-9]))
+        popViewport()
+        
+      }
 
     xax <- axTicks(1)
     axis(1, at=xax, lwd=0, lwd.ticks=1,
@@ -22,17 +38,17 @@ ggplot2base <- function(x, y, ...)
     abline(v=xax, col="white", lwd=1.3)
     abline(v=xax[-length(xax)] + diff(xax)[1]/2, col="white", lwd=0.5)
 
-    points(x, y, pch=16, ...)
+    points(x, y, pch=1, ...)
     par(op)
   }
 
-gcscatterplot <- function(data, x, y, col="None",
+gcscatterplot <- function(data, x, y, bg=NULL, col="None",
                           xlab=NULL, ylab=NULL,
                           threshold, thrtype=c("x", "y"),
                           outliers=TRUE,
                           xlim, ylim, main)
   {
-       
+
     colors <- colorRampPalette(brewer.pal(9,"Blues"))
 
     ##because of merge can introduce "colnames.y"
@@ -47,8 +63,8 @@ gcscatterplot <- function(data, x, y, col="None",
 
     if(thrtype == "x")
       {
-        xlim <- range(c(data[,x], threshold), na.rm=TRUE)
-        ylim <- range(data[,y], na.rm=TRUE)
+        xlim <- range(c(data[,x], threshold, bg$x), na.rm=TRUE)
+        ylim <- range(c(data[,y], bg$y), na.rm=TRUE)
       }
     else
       {
@@ -57,6 +73,7 @@ gcscatterplot <- function(data, x, y, col="None",
       }
 
     ggplot2base(data[,x], data[,y],
+                bg,
                 xlab=xlab, ylab=ylab,
                 col=as.character(cols),
                 xlim=xlim, ylim=ylim,
@@ -68,7 +85,7 @@ gcscatterplot <- function(data, x, y, col="None",
       abline(h=threshold, col=1, lty=2)
 
     if(nlevels(fcols) > 1 & nlevels(fcols) != length(fcols))
-      legend("topleft", levels(fcols), ncol=nlevels(fcols)%/%15 + 1, pch=16,
+      legend("topleft", levels(fcols), ncol=nlevels(fcols)%/%15 + 1, pch=1,
              text.col=levels(cols), col=levels(cols), title=col,
              title.col=1, bty="n")
 
@@ -98,14 +115,18 @@ rotateData <- function(data, columns)
   data
 }
 
-plotMU <- function(object, col, location, threshold, plotOutliers=FALSE)
+plotMU <- function(object, col, location, threshold, plotOutliers=FALSE, background=FALSE)
   {
-    
+
     MU <- log2(t(object@MU))
     targets <- object@targets
     data <- merge(MU, targets, by="row.names")
-
     data <- rotateData(data, columns=c("Methylated", "Unmethylated"))
+
+    if(background)              
+      bg <- get("background", envir=globalenv())[["MU"]]
+    else
+      bg <- NULL
 
     if(!is.null(location$x) & !is.null(location$y))
       {
@@ -117,9 +138,10 @@ plotMU <- function(object, col, location, threshold, plotOutliers=FALSE)
 
     outliers <- data$Row.names[data$Methylated <= threshold]
     setOutliers(outliers, type="MU")
-    
+
     ##plot
     gcscatterplot(data, x="Methylated", y="Unmethylated",
+                  bg,
                   col=col, threshold=threshold, thrtype="x",
                   outliers=plotOutliers,
                   xlab=expression(paste(log[2], sqrt(M%*%U))),
@@ -127,7 +149,7 @@ plotMU <- function(object, col, location, threshold, plotOutliers=FALSE)
                   main="rotated MU plot")
   }
 
-plotOP <- function(object, col, location, threshold, plotOutliers=FALSE)
+plotOP <- function(object, col, location, threshold, plotOutliers=FALSE, background=FALSE)
   {
     data <- object@plotdata
     d <- data[grepl(qcProbes["NP"], data$Type),]
@@ -144,6 +166,11 @@ plotOP <- function(object, col, location, threshold, plotOutliers=FALSE)
 
     data <- rotateData(data, columns=c("x", "y"))
 
+    if(background)
+      bg <- get("background", envir=globalenv())[["NP"]]
+    else
+      bg <- NULL
+
     if(!is.null(location$x) & !is.null(location$y))
       {
         x <- data$x
@@ -156,6 +183,7 @@ plotOP <- function(object, col, location, threshold, plotOutliers=FALSE)
     setOutliers(outliers, type="OP")
 
     p <- gcscatterplot(data, x="x", y="y",
+                       bg,
                        col=col, threshold=threshold, thrtype="x",
                        outliers=plotOutliers,
                        ylab=expression(paste(log[2],"(", R/G, ")")),
@@ -163,7 +191,7 @@ plotOP <- function(object, col, location, threshold, plotOutliers=FALSE)
                        main="Sample-dependent overall quality control (NP)")
   }
 
-plotBS <- function(object, col, location, threshold, plotOutliers=FALSE)
+plotBS <- function(object, col, location, threshold, plotOutliers=FALSE, background=FALSE)
   {
     data <- object@plotdata
     d <- data[grepl(qcProbes["BSI"], data$Type),]
@@ -180,6 +208,11 @@ plotBS <- function(object, col, location, threshold, plotOutliers=FALSE)
 
     data <- rotateData(data, columns=c("x", "y"))
 
+    if(background)
+       bg <- get("background", envir=globalenv())[["BSI"]]
+    else
+      bg <- NULL
+
     if(!is.null(location$x) & !is.null(location$y))
       {
         x <- data$x
@@ -192,6 +225,7 @@ plotBS <- function(object, col, location, threshold, plotOutliers=FALSE)
     setOutliers(outliers, type="BS")
 
     p <- gcscatterplot(data, x="x", y="y",
+                       bg,
                        col=col, threshold=threshold, thrtype="x",
                        outliers=plotOutliers,
                        ylab=expression(paste(log[2],"(", R/G, ")")),
@@ -199,7 +233,7 @@ plotBS <- function(object, col, location, threshold, plotOutliers=FALSE)
                        main="Bisulfite Conversion I quality control")
   }
 
-plotHC <- function(object, col, location, threshold, plotOutliers=FALSE)
+plotHC <- function(object, col, location, threshold, plotOutliers=FALSE, background=FALSE)
   {
     data <- object@plotdata
     d <- data[grepl(qcProbes["HYB"], data$Type),]
@@ -210,6 +244,11 @@ plotHC <- function(object, col, location, threshold, plotOutliers=FALSE)
     data <- data.frame(x, y, row.names=d$Samples[grepl("High", d$Name)])
     targets <- object@targets
     data <- merge(data, targets, by="row.names", suffixes=c("", ".y")) ##as we expect x and y
+
+    if(background)
+       bg <- get("background", envir=globalenv())[["HYB"]]
+    else
+      bg <- NULL
 
     if(!is.null(location$x) & !is.null(location$y))
       {
@@ -223,6 +262,7 @@ plotHC <- function(object, col, location, threshold, plotOutliers=FALSE)
     setOutliers(outliers, type="HC")
 
     p <- gcscatterplot(data, x="x", y="y",
+                       bg,
                        col=col, threshold=threshold, thrtype="x",
                        outliers=plotOutliers,
                        ylab=expression(paste(log[2],"(", H/L, ")")),
@@ -231,7 +271,7 @@ plotHC <- function(object, col, location, threshold, plotOutliers=FALSE)
 
   }
 
-plotDP <- function(object, col, location, threshold, plotOutliers=FALSE)
+plotDP <- function(object, col, location, threshold, plotOutliers=FALSE, background=FALSE)
   {
     y <- object@DPfreq
     x <- 1:length(y)
@@ -252,6 +292,7 @@ plotDP <- function(object, col, location, threshold, plotOutliers=FALSE)
 
     p <- gcscatterplot(data, x="x", y="y",
                        col=col, threshold=threshold, thrtype="y",
+                       bg = NULL, ##do not show a background for the detection p-values
                        outliers=plotOutliers,
                        xlab="Samples",
                        ylab="#probes P-value < 0.01",
