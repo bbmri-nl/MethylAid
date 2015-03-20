@@ -16,5 +16,13 @@ CHANGES IN VERSION 1.1.3
 -----------------------
 
     o add option/functionality to show background data
+
+CHANGES IN VERSION 1.1.4
+-----------------------
       
+BUG FIXES
+    
+    o fixed outlier detection using all quality
+      control plots using an initialization method      
+
 

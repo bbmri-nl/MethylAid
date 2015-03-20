@@ -18,13 +18,17 @@ initialize <- function(object, output, thresholds, background)
     args$type <- NULL
 
     ##detect outliers
+    tmp <- tempfile("plot", fileext = ".pdf")
+    pdf(tmp)    
     for(plotType in names(thresholds))
       {
         args$plotType <- plotType
         args$threshold <- thresholds[[plotType]]
         plotType <- paste0("plot", plotType)
-        output[[plotType]] <- renderPlot({ do.call(qcplot, args) })
+        do.call(qcplot, args)
       }
+    dev.off()
+    file.remove(tmp)
 
     ##generate background data and make it accesible for the plotting functions
     if(!is.null(background))
@@ -130,13 +134,13 @@ server450k <- function(object, thresholds, background)
         ##create plot
         observe({
 
-          args <- getPlotArguments()
-          plotType <- args$plotType
-
+          args <- getPlotArguments()          
+          plotType <- paste0("plot", args$plotType)
+          
           ##optionally save plot
           output$save <- downloadHandler(
                                          filename=function() {
-                                           paste0("plot", plotType, ".pdf")
+                                           paste0(plotType, ".pdf")
                                          },
                                          content=function(file) {
                                            message(paste("Saving ..."))
@@ -151,8 +155,7 @@ server450k <- function(object, thresholds, background)
                                          ##contentType='image/png'
                                          )
 
-          ##do the plotting
-          plotType <- paste0("plot", plotType)
+          ##do the plotting         
           output[[plotType]] <- renderPlot({ do.call(qcplot, args) })
         })
 
