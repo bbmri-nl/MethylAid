@@ -1,101 +1,139 @@
 ui450k <- function(object)
   {
-    width = "100%"
-    height = "400px"
 
-    start = "<br> <p style=\"width:800px;text-align:justify\"><span style=\"color:#000000;font-size:16px\">"
-      end = "</span></p><br><br>"
+    condFC <- "%spnlMain == 'FC' && (%spnlFC == 'MU' || %spnlFC == 'OP' || %spnlFC == 'BS' || %spnlFC == 'HC' || %spnlFC == 'DP')"
+    condSDC <- "%spnlMain ==  'SDC' && (%spnlSDC == 'BSI' || %spnlSDC == 'BSII' || %spnlSDC == 'SPI' || %spnlSDC == 'SPII' || %spnlSDC == 'NP')"
+    condSIC <- "%spnlMain == 'SIC' && (%spnlSIC == 'SC' || %spnlSIC == 'TR' || %spnlSIC == 'EC' || %spnlSIC == 'HYB')"
+    condMain <- "%spnlMain == 'FC' || %spnlMain ==  'SDC' || %spnlMain == 'SIC'"
 
-    pageWithSidebar(headerPanel(paste("MethylAid(", packageVersion("MethylAid"),"): interactive visualization of Illumina 450k Methylation array data", sep="")),
+    pageWithSidebar(
+      
+      headerPanel(hdrUI),
 
-                    sidebarPanel(conditionalPanel(condition = "input.mainPanel == 'Filter controls' && (input.fcPanel == 'rotated M vs U plot' || input.fcPanel == 'Overall sample-dependent control plot' || input.fcPanel == 'Bisulfite conversion control plot' || input.fcPanel == 'Overall sample-independent control plot' || input.fcPanel == 'Detection P-value plot')",
-                                                  helpText("These controls are used to detect bad quality samples.",
-                                                           "The default thresholds are based on our experience with",
-                                                           "450k data that we have seen so far."),
-                                                  br(), br(),
-                                                  selectInput(inputId = "colorby", label = "Highlight metadata column:", choices = colnames(object@targets), selected = "None")
-                                                  ),
+      sidebarPanel(conditionalPanel(condition = gsub("%s", "input.", condFC),
+                                    helpText(disclaimer),
+                                    br(), br(),
+                                    selectInput("colorby", "Color by:", colnames(object@targets), "None")),
 
-                                 conditionalPanel(condition = "input.mainPanel ==  'Sample-dependent controls' && (input.sdcPanel == 'BSI' || input.sdcPanel == 'BSII' || input.sdcPanel == 'SPI' || input.sdcPanel == 'SPII' || input.sdcPanel == 'NP')",
-                                                  helpText("The sample-dependent controls can be used to evaluate",
-                                                           "performance across samples. These control oligos are",
-                                                           "designed for bisulfite-converted human genomic DNA",
-                                                           "sequences. Because target sequences do not contain CpG",
-                                                           "dinucleotides, the performance of the control oligos does",
-                                                           "not depend on the methylation status of the template DNA."),
-                                                  br(), br(),
-                                                  selectInput(inputId = "typeSdcPanel", label = "plot type:", choices = c("boxplot", "sample", "scatter"), selected = "sample")
-                                                  ),
+                   conditionalPanel(condition = gsub("%s", "input.", condSDC),
+                                    helpText(htSDC),
+                                    br(), br(),
+                                    selectInput("plotType", "Plot type:", c("boxplot", "sample", "scatter"), "sample")),
 
-                                 conditionalPanel(condition = "input.mainPanel == 'Sample-independent controls' && (input.sicPanel == 'SC' || input.sicPanel == 'TR' || input.sicPanel == 'EC' || input.sicPanel == 'HYB')",
-                                                  helpText("Sample-independent controls evaluate the performance of",
-                                                           "specific steps in the process flow."),
-                                                  br(), br(),
-                                                  selectInput(inputId = "typeSicPanel", label = "plot type:", choices = c("boxplot", "sample", "scatter"), selected = "sample")
-                                                  ),
+                   conditionalPanel(condition = gsub("%s", "input.", condSIC),
+                                    helpText(htSIC),
+                                    br(), br(),
+                                    selectInput("plotType", "Plot type:", c("boxplot", "sample", "scatter"), "sample")
+                                    ),
 
-                                 conditionalPanel(condition = "input.mainPanel == 'Filter controls' || input.mainPanel ==  'Sample-dependent controls' || input.mainPanel == 'Sample-independent controls'",
+                   conditionalPanel(condition = gsub("%s", "input.", condMain),
+                                    checkboxInput("outliers", "Show outliers", FALSE),
+                                    checkboxInput("background", "Show background", FALSE),
+                                    downloadLink("save", "Save Plot")
+                                    ),
+                   br(), br(),
+                   actionButton("exit", "Exit")
+                   ),
 
-                                                  checkboxInput("outliers", "Show outliers", value = FALSE),
-                                                  checkboxInput("background", label = "Show background data", value = FALSE),
-                                                  downloadLink("save", "Save Plot")
-                                                  ),
+      mainPanel(
 
+        tabsetPanel(id="pnlMain",
 
-                                 br(), br(),
+                    tabPanel(title = "Filter control plots", value="FC",
+                             tabsetPanel(id = "pnlFC",
 
-                                 actionButton("exit", "Exit")
-                                 ),
+                                         tabPanel(title = names(hdrFC)[1],
+                                                  HTML(paste0(start, hdrFC[1], end)),
+                                                  plotOutput(paste0("plot", names(hdrFC)[1]), width=width, height=height,
+                                                             clickId=paste0("clickId", names(hdrFC[1])))),
 
-                    mainPanel(
-                              tabsetPanel(id = "mainPanel",
-                                          tabPanel("Filter controls",
-                                                   tabsetPanel(id = "fcPanel",
-                                                               tabPanel(title = "rotated M vs U plot",
-                                                                        ##HTML(paste0(start, headers["MU"], end)),
-                                                                        plotOutput("plotMU", width=width, height=height, clickId="clickIdMU")),
-                                                               tabPanel(title = "Overall sample-dependent control plot",
-                                                                        ##HTML(paste0(start, headers["OP"], end)),
-                                                                        plotOutput("plotOP", width=width, height=height, clickId="clickIdOP")),
-                                                               tabPanel(title = "Bisulfite conversion control plot",
-                                                                        ##HTML(paste0(start, headers["BS"], end)),
-                                                                        plotOutput("plotBS", width=width, height=height, clickId="clickIdBS")),
-                                                               tabPanel(title = "Overall sample-independent control plot",
-                                                                        ##HTML(paste0(start, headers["HC"], end)),
-                                                                        plotOutput("plotHC", width=width, height=height, clickId="clickIdHC")),
-                                                               tabPanel(title = "Detection P-value plot",
-                                                                        ##HTML(paste0(start, headers["DP"], end)),
-                                                                        plotOutput("plotDP", width=width, height=height, clickId="clickIdDP"))
-                                                               )
-                                                   ),
+                                         tabPanel(title = names(hdrFC)[2],
+                                                  HTML(paste0(start, hdrFC[2], end)),
+                                                  plotOutput(paste0("plot", names(hdrFC)[2]), width=width, height=height,
+                                                             clickId=paste0("clickId", names(hdrFC[2])))),
 
-                                          tabPanel("Sample-dependent controls",
-                                                   tabsetPanel(id = "sdcPanel",
-                                                               tabPanel(title = "BSI", HTML(paste0(start, headers["BSI"], end)), plotOutput("plotBSI", width=width, height=height)),
-                                                               tabPanel(title = "BSII", HTML(paste0(start, headers["BSII"], end)), plotOutput("plotBSII", width=width, height=height)),
-                                                               tabPanel(title = "SPI", HTML(paste0(start, headers["SPI"], end)), plotOutput("plotSPI", width=width, height=height)),
-                                                               tabPanel(title = "SPII", HTML(paste0(start, headers["SPII"], end)), plotOutput("plotSPII", width=width, height=height)),
-                                                               tabPanel(title = "NP", HTML(paste0(start, headers["NP"], end)), plotOutput("plotNP", width=width, height=height))
-                                                               )
-                                                   ),
+                                         tabPanel(title = names(hdrFC)[3],
+                                                  HTML(paste0(start, hdrFC[3], end)),
+                                                  plotOutput(paste0("plot", names(hdrFC)[3]), width=width, height=height,
+                                                             clickId=paste0("clickId", names(hdrFC[3])))),
 
-                                          tabPanel("Sample-independent controls",
-                                                   tabsetPanel(id = "sicPanel",
-                                                               tabPanel(title = "SC", HTML(paste0(start, headers["SC"], end)), plotOutput("plotSC", width=width, height=height)),
-                                                               tabPanel(title = "TR", HTML(paste0(start, headers["TR"], end)), plotOutput("plotTR", width=width, height=height)),
-                                                               tabPanel(title = "EC", HTML(paste0(start, headers["EC"], end)), plotOutput("plotEC", width=width, height=height)),
-                                                               tabPanel(title = "HYB", HTML(paste0(start, headers["HYB"], end)), plotOutput("plotHYB", width=width, height=height))
-                                                               )
-                                                   ),
+                                         tabPanel(title = names(hdrFC)[4],
+                                                  HTML(paste0(start, hdrFC[4], end)),
+                                                  plotOutput(paste0("plot", names(hdrFC)[4]), width=width, height=height,
+                                                             clickId=paste0("clickId", names(hdrFC[4])))),
 
-                                          tabPanel(title = "Outliers",
-                                                   dataTableOutput('Outliers')
-                                                   ),
-                                          tabPanel(title = "Help",
-                                                   includeHTML(file.path(path.package("MethylAid"), "www", "Help.html"))
-                                                   )
+                                         tabPanel(title = names(hdrFC)[5],
+                                                  HTML(paste0(start, hdrFC[5], end)),
+                                                  plotOutput(paste0("plot", names(hdrFC)[5]), width=width, height=height,
+                                                             clickId=paste0("clickId", names(hdrFC[5]))))
+                                         )
 
-                                          ) ##tabsetPanel
-                              )##mainPanel
-                    )##pageWithSidebar
+                             ),
+
+                    tabPanel(title = "Sample-dependent controls", value="SDC",
+                             tabsetPanel(id = "pnlSDC",
+
+                                         tabPanel(title = names(hdrSDC)[1],
+                                                  HTML(paste0(start, hdrSDC[1], end)),
+                                                  plotOutput(paste0("plot", names(hdrSDC)[1]), width=width, height=height,
+                                                             clickId=paste0("clickId", names(hdrSDC[1])))),
+
+                                         tabPanel(title = names(hdrSDC)[2],
+                                                  HTML(paste0(start, hdrSDC[2], end)),
+                                                  plotOutput(paste0("plot", names(hdrSDC)[2]), width=width, height=height,
+                                                             clickId=paste0("clickId", names(hdrSDC[2])))),
+
+                                         tabPanel(title = names(hdrSDC)[3],
+                                                  HTML(paste0(start, hdrSDC[3], end)),
+                                                  plotOutput(paste0("plot", names(hdrSDC)[3]), width=width, height=height,
+                                                             clickId=paste0("clickId", names(hdrSDC[3])))),
+
+                                         tabPanel(title = names(hdrSDC)[4],
+                                                  HTML(paste0(start, hdrSDC[4], end)),
+                                                  plotOutput(paste0("plot", names(hdrSDC)[4]), width=width, height=height,
+                                                             clickId=paste0("clickId", names(hdrSDC[4])))),
+
+                                         tabPanel(title = names(hdrSDC)[5],
+                                                  HTML(paste0(start, hdrSDC[5], end)),
+                                                  plotOutput(paste0("plot", names(hdrSDC)[5]), width=width, height=height,
+                                                             clickId=paste0("clickId", names(hdrSDC[5]))))
+                                         )
+                             ),
+
+                    tabPanel(title = "Sample-independent controls", value="SIC",
+                             tabsetPanel(id = "pnlSIC",
+                                         tabPanel(title = names(hdrSIC)[1],
+                                                  HTML(paste0(start, hdrSIC[1], end)),
+                                                  plotOutput(paste0("plot", names(hdrSIC)[1]), width=width, height=height,
+                                                             clickId=paste0("clickId", names(hdrSIC[1])))),
+
+                                         tabPanel(title = names(hdrSIC)[2],
+                                                  HTML(paste0(start, hdrSIC[2], end)),
+                                                  plotOutput(paste0("plot", names(hdrSIC)[2]), width=width, height=height,
+                                                             clickId=paste0("clickId", names(hdrSIC[2])))),
+
+                                         tabPanel(title = names(hdrSIC)[3],
+                                                  HTML(paste0(start, hdrSIC[3], end)),
+                                                  plotOutput(paste0("plot", names(hdrSIC)[3]), width=width, height=height,
+                                                             clickId=paste0("clickId", names(hdrSIC[3])))),
+
+                                         tabPanel(title = names(hdrSIC)[4],
+                                                  HTML(paste0(start, hdrSIC[4], end)),
+                                                  plotOutput(paste0("plot", names(hdrSIC)[4]), width=width, height=height,
+                                                             clickId=paste0("clickId", names(hdrSIC[4]))))
+                                         ),
+
+                             tabPanel(title = "Outliers",
+                                      dataTableOutput('Outliers')
+                                      ),
+                             
+                             tabPanel(title = "About",
+                                      includeHTML(file.path(path.package("MethylAid"), "www", "About.html"))
+                                      )
+
+                             )
+                    )
+
+        )
+      )
   }

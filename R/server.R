@@ -19,7 +19,7 @@ initialize <- function(object, output, thresholds, background)
 
     ##detect outliers
     tmp <- tempfile("plot", fileext = ".pdf")
-    pdf(tmp)    
+    pdf(tmp)
     for(plotType in names(thresholds))
       {
         args$plotType <- plotType
@@ -33,7 +33,7 @@ initialize <- function(object, output, thresholds, background)
     ##generate background data and make it accesible for the plotting functions
     if(!is.null(background))
       assign("background", as.background(background), envir = globalenv())
-      
+
   }
 
 ##finalizer
@@ -70,15 +70,10 @@ server450k <- function(object, thresholds, background)
 
         getTabName <- function()
           {
-            switch(input$mainPanel,
-                   `Filter controls`= switch(input$fcPanel,
-                     `rotated M vs U plot`="MU",
-                     `Overall sample-dependent control plot`="OP",
-                     `Bisulfite conversion control plot`="BS",
-                     `Overall sample-independent control plot`="HC",
-                     `Detection P-value plot`="DP"),
-                   `Sample-dependent controls`=input$sdcPanel,
-                   `Sample-independent controls`=input$sicPanel,
+            switch(input$pnlMain,
+                   `FC`= input$pnlFC,
+                   `SDC`=input$pnlSDC,
+                   `SIC`=input$pnlSIC,
                    `Outliers`="",
                    `Help`="")
           }
@@ -88,7 +83,8 @@ server450k <- function(object, thresholds, background)
             if(is.null(input$clickIdMU) & is.null(input$clickIdOP) &
                is.null(input$clickIdBS) & is.null(input$clickIdHC) &
                is.null(input$clickIdDP))
-              return(list(x=NULL, y=NULL))
+
+              location <- list(x=NULL, y=NULL)
 
             location <- switch(getTabName(),
                                MU=list(x=input$clickIdMU$x, y=input$clickIdMU$y),
@@ -96,15 +92,15 @@ server450k <- function(object, thresholds, background)
                                BS=list(x=input$clickIdBS$x, y=input$clickIdBS$y),
                                HC=list(x=input$clickIdHC$x, y=input$clickIdHC$y),
                                DP=list(x=input$clickIdDP$x, y=input$clickIdDP$y))
+
             return(location)
           }
 
-        getType <- function()
+        getPlotType <- function()
           {
-            switch(input$mainPanel,
-                   `Filter controls` = "scatter",
-                   `Sample-dependent controls`= input$typeSdcPanel,
-                   `Sample-independent controls`= input$typeSicPanel,
+            switch(input$pnlMain,                   
+                   `SDC`= input$plotType,
+                   `SIC`= input$plotType,
                    "scatter")
           }
 
@@ -125,8 +121,8 @@ server450k <- function(object, thresholds, background)
             args$location <- getLocation() ##reactive of mouse clicking
             args$threshold <- thresholds[[getTabName()]]
             args$outliers <- input$outliers ##reactive on outliers checkbox
-            args$type <- getType() ##reactive on quality control display type
-            args$plotType <- getTabName() ##reactive on tab panel switching            
+            args$type <- getPlotType() ##reactive on quality control display type
+            args$plotType <- getTabName() ##reactive on tab panel switching
             args$background <- getBackground()
             args
           }
@@ -134,28 +130,28 @@ server450k <- function(object, thresholds, background)
         ##create plot
         observe({
 
-          args <- getPlotArguments()          
+          args <- getPlotArguments()
           plotType <- paste0("plot", args$plotType)
-          
+
           ##optionally save plot
           output$save <- downloadHandler(
-                                         filename=function() {
-                                           paste0(plotType, ".pdf")
-                                         },
-                                         content=function(file) {
-                                           message(paste("Saving ..."))
-                                           ##this doesn't work
-                                           ##ggsave(filename=file,
-                                           ##plot=do.call(qcplot, args),
-                                           ##type="cairo-png")
-                                           pdf(file, width=7, height = 7/2)
-                                           message(do.call(qcplot, args))
-                                           dev.off()
-                                         },
-                                         ##contentType='image/png'
-                                         )
+            filename=function() {
+              paste0(plotType, ".pdf")
+            },
+            content=function(file) {
+              message(paste("Saving ..."))
+              ##this doesn't work
+              ##ggsave(filename=file,
+              ##plot=do.call(qcplot, args),
+              ##type="cairo-png")
+              pdf(file, width=7, height = 7/2)
+              message(do.call(qcplot, args))
+              dev.off()
+            },
+            ##contentType='image/png'
+            )
 
-          ##do the plotting         
+          ##do the plotting
           output[[plotType]] <- renderPlot({ do.call(qcplot, args) })
         })
 

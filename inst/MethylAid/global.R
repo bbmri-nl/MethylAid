@@ -1,0 +1,2 @@
+library(MethylAid)
+data(exampleData)

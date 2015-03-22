@@ -1,9 +1,35 @@
-headers = list(
-  ##controls used for filtering of bad quality samples
-  MU = "Median Methylated versus Unmethylated .",
-  OP = "Overall probe quality control using non-polymorphic controls.",
-  BS = "Bisulphite conversion .",
-  ##sample-dependent controls
+
+width = "100%"
+height = "400px"
+
+start = "<br> <p style=\'width:800px;text-align:justify\'><span style=\'color:#000000;font-size:16px\'>"
+  end = "</span></p><br><br>"
+
+
+hdrUI <- paste("MethylAid(", packageVersion("MethylAid"),"): Interactive visualization of Illumina 450k Methylation array data", sep="")
+
+disclaimer <- c("These controls are used to detect bad quality samples.",
+                "The default thresholds are based on our experience with",
+                "450k data that we have seen so far.")
+
+htSDC <- c("The sample-dependent controls can be used to evaluate",
+           "performance across samples. These control oligos are",
+           "designed for bisulfite-converted human genomic DNA",
+           "sequences. Because target sequences do not contain CpG",
+           "dinucleotides, the performance of the control oligos does",
+           "not depend on the methylation status of the template DNA.")
+
+htSIC <- c("Sample-independent controls evaluate the performance of",
+           "specific steps in the process flow.")
+
+hdrFC = list(
+  MU = "Median Methylated vs Unmethylated.",
+  OP = "Overall quality control.",
+  BS = "Bisulphite Conversion.",
+  HC = "Hybridization",
+  DP= "Detection P-values")
+
+hdrSDC <- list(
   BSI = "Bisulphite conversion controls (Type I): These controls use the Infinium I probe design and allele-specific single base extension
 to monitor efficiency of bisulfite conversion.",
   BSII = "Bisulphite conversion controls (TypeII): These controls use Infinium II probe design and single base extension to monitor the
@@ -16,8 +42,9 @@ background.",
 to detection, by querying a particular base in a non-polymorphic region of the bisulfite
 genome.",
   NC = "Negative controls: Negative control probes are randomly permutated sequences that should not hybridize
-to the DNA template.",
-  ##sample-independent controls
+to the DNA template.")
+
+hdrSIC <- list(
   SC = "Staining controls: Staining controls are used to examine the efficiency of the staining step in both the red and green channels.",
   EC = "Extension controls: Extension controls test the extension efficiency of A, T, C, and G nucleotides from a hairpin probe, and are
 therefore sample-independent. Both red (A,T) and green (C,G) channels are monitored.",

@@ -25,4 +25,9 @@ BUG FIXES
     o fixed outlier detection using all quality
       control plots using an initialization method      
 
+CHANGES IN VERSION 1.1.5
+-----------------------
+    
+    o restructered ui.R
+
 
