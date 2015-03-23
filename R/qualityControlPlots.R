@@ -1,4 +1,4 @@
-qcscatterplot <- function(object, plotType, outliers)
+qcscatterplot <- function(object, plotType, showOutliers)
   {
     data <- object@plotdata
     data <- data[grepl(qcProbes[plotType], data$Type),]
@@ -19,7 +19,7 @@ qcscatterplot <- function(object, plotType, outliers)
                               colour="black", size = 4, shape = 4)
       }
 
-    if(outliers)
+    if(showOutliers)
       {
         outliers <- getOutliers(as.character(data$Samples))
         if(any(outliers))
@@ -31,7 +31,7 @@ qcscatterplot <- function(object, plotType, outliers)
     gp
   }
 
-qcsampleplot <- function(object, plotType, outliers)
+qcsampleplot <- function(object, plotType, showOutliers)
   {
     data <- object@plotdata
     d <- data[grepl(qcProbes[plotType], data$Type),]
@@ -67,7 +67,7 @@ qcsampleplot <- function(object, plotType, outliers)
                               shape=4, colour="black", size = 4)
       }
 
-    if(outliers)
+    if(showOutliers)
       {
         outliers <- getOutliers(sampleNames)
         if(any(outliers))
@@ -79,7 +79,7 @@ qcsampleplot <- function(object, plotType, outliers)
     gp
   }
 
-qcboxplot <- function(object, plotType, outliers)
+qcboxplot <- function(object, plotType, showOutliers)
   {
     data <- object@plotdata
     d <- data[grepl(qcProbes[plotType], data$Type),]
@@ -105,7 +105,7 @@ qcboxplot <- function(object, plotType, outliers)
                               colour="black", size = 4.5, shape = 4)
       }
 
-    if(outliers)
+    if(showOutliers)
       {
         outliers <- getOutliers(as.character(data$Samples))
         if(any(outliers))

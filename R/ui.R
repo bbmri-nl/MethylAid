@@ -7,7 +7,7 @@ ui450k <- function(object)
     condMain <- "%spnlMain == 'FC' || %spnlMain ==  'SDC' || %spnlMain == 'SIC'"
 
     pageWithSidebar(
-      
+
       headerPanel(hdrUI),
 
       sidebarPanel(conditionalPanel(condition = gsub("%s", "input.", condFC),
@@ -27,7 +27,7 @@ ui450k <- function(object)
                                     ),
 
                    conditionalPanel(condition = gsub("%s", "input.", condMain),
-                                    checkboxInput("outliers", "Show outliers", FALSE),
+                                    checkboxInput("showOutliers", "Show outliers", FALSE),
                                     checkboxInput("background", "Show background", FALSE),
                                     downloadLink("save", "Save Plot")
                                     ),
@@ -121,19 +121,17 @@ ui450k <- function(object)
                                                   HTML(paste0(start, hdrSIC[4], end)),
                                                   plotOutput(paste0("plot", names(hdrSIC)[4]), width=width, height=height,
                                                              clickId=paste0("clickId", names(hdrSIC[4]))))
-                                         ),
+                                         )
+                             ),
 
-                             tabPanel(title = "Outliers",
-                                      dataTableOutput('Outliers')
-                                      ),
-                             
-                             tabPanel(title = "About",
-                                      includeHTML(file.path(path.package("MethylAid"), "www", "About.html"))
-                                      )
+                    tabPanel(title = "Outliers",
+                             dataTableOutput('Outliers')
+                             ),
 
+                    tabPanel(title = "About",
+                             includeHTML(file.path(path.package("MethylAid"), "www", "About.html"))
                              )
                     )
-
         )
       )
   }

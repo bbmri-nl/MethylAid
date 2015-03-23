@@ -13,18 +13,16 @@ initialize <- function(object, output, thresholds, background)
     args <- list()
     args$object <- object
     args$col <- "None"
-    args$location <- list(x=NULL, y=NULL)
-    args$outliers <- FALSE
-    args$type <- NULL
+    args$showOutliers <- FALSE
+    args$plotType <- NULL
 
     ##detect outliers
     tmp <- tempfile("plot", fileext = ".pdf")
     pdf(tmp)
-    for(plotType in names(thresholds))
+    for(plotName in names(thresholds))
       {
-        args$plotType <- plotType
-        args$threshold <- thresholds[[plotType]]
-        plotType <- paste0("plot", plotType)
+        args$plotName <- plotName
+        args$threshold <- thresholds[[plotName]]
         do.call(qcplot, args)
       }
     dev.off()
@@ -68,61 +66,71 @@ server450k <- function(object, thresholds, background)
         ##initialize to get all outliers detected do this only once
         initialize(object, output, thresholds, background)
 
-        getTabName <- function()
-          {
-            switch(input$pnlMain,
-                   `FC`= input$pnlFC,
-                   `SDC`=input$pnlSDC,
-                   `SIC`=input$pnlSIC,
-                   `Outliers`="",
-                   `Help`="")
-          }
+        getTabName <- reactive({
+          switch(input$pnlMain,
+                 `FC`= input$pnlFC,
+                 `SDC`=input$pnlSDC,
+                 `SIC`=input$pnlSIC,
+                 `Outliers`="",
+                 `About`="")
+        })
 
-        getLocation <- function()
-          {
-            if(is.null(input$clickIdMU) & is.null(input$clickIdOP) &
-               is.null(input$clickIdBS) & is.null(input$clickIdHC) &
-               is.null(input$clickIdDP))
+        clickIdMU <- reactive({
+          location <- list(x=input$clickIdMU$x, y=input$clickIdMU$y)
+          assign("location", location, envir=globalenv())
+        })
 
-              location <- list(x=NULL, y=NULL)
+        clickIdOP <- reactive({
+          location <- list(x=input$clickIdOP$x, y=input$clickIdOP$y)
+          assign("location", location, envir=globalenv())
+        })
 
-            location <- switch(getTabName(),
-                               MU=list(x=input$clickIdMU$x, y=input$clickIdMU$y),
-                               OP=list(x=input$clickIdOP$x, y=input$clickIdOP$y),
-                               BS=list(x=input$clickIdBS$x, y=input$clickIdBS$y),
-                               HC=list(x=input$clickIdHC$x, y=input$clickIdHC$y),
-                               DP=list(x=input$clickIdDP$x, y=input$clickIdDP$y))
+        clickIdBS <- reactive({
+          location <- list(x=input$clickIdBS$x, y=input$clickIdBS$y)
+          assign("location", location, envir=globalenv())
+        })
 
-            return(location)
-          }
+        clickIdHC <- reactive({
+          location <- list(x=input$clickIdHC$x, y=input$clickIdHC$y)
+          assign("location", location, envir=globalenv())
+        })
 
-        getPlotType <- function()
-          {
-            switch(input$pnlMain,                   
-                   `SDC`= input$plotType,
-                   `SIC`= input$plotType,
-                   "scatter")
-          }
+        clickIdDP <- reactive({
+          location <- list(x=input$clickIdDP$x, y=input$clickIdDP$y)
+          assign("location", location, envir=globalenv())
+        })
 
-        getBackground <- function()
-          {
-            if(exists("background", envir=globalenv()))
-              return(input$background)
-            else
-              return(FALSE)
-          }
+        getPlotType <- reactive({
+          switch(input$pnlMain,
+                 `SDC`= input$plotType,
+                 `SIC`= input$plotType,
+                 "scatter")
+        })
+
+        getBackground <- reactive({
+          if(exists("background", envir=globalenv()))
+            return(input$background)
+          else
+            return(FALSE)
+        })
 
         getPlotArguments <- function()
           {
+
+            clickIdMU()
+            clickIdOP()
+            clickIdBS()
+            clickIdHC()
+            clickIdDP()
+
             ##construct plotting arguments
             args <- list()
             args$object <- object
             args$col <- input$colorby ##reactive on metadata
-            args$location <- getLocation() ##reactive of mouse clicking
             args$threshold <- thresholds[[getTabName()]]
-            args$outliers <- input$outliers ##reactive on outliers checkbox
-            args$type <- getPlotType() ##reactive on quality control display type
-            args$plotType <- getTabName() ##reactive on tab panel switching
+            args$showOutliers <- input$showOutliers ##reactive on outliers checkbox
+            args$plotType <- getPlotType() ##reactive on quality control display type
+            args$plotName <- getTabName() ##reactive on tab panel switching
             args$background <- getBackground()
             args
           }
@@ -131,12 +139,12 @@ server450k <- function(object, thresholds, background)
         observe({
 
           args <- getPlotArguments()
-          plotType <- paste0("plot", args$plotType)
+          plotName <- paste0("plot", args$plotName)
 
           ##optionally save plot
           output$save <- downloadHandler(
             filename=function() {
-              paste0(plotType, ".pdf")
+              paste0(plotName, ".pdf")
             },
             content=function(file) {
               message(paste("Saving ..."))
@@ -152,7 +160,7 @@ server450k <- function(object, thresholds, background)
             )
 
           ##do the plotting
-          output[[plotType]] <- renderPlot({ do.call(qcplot, args) })
+          output[[plotName]] <- renderPlot({ do.call(qcplot, args) })
         })
 
         ##show outliers

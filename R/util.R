@@ -10,28 +10,28 @@ qcProbes=list(
   SC="^STAINING$",
   NC="^NEGATIVE$") ## we don't use the normalization controls NORM_A, NORM_G, NORM_C or NORM_T
 
-qcplot <- function(object, plotType, col,
-                   type=c("boxplot", "sample", "scatter"),
-                   location=NULL, threshold=NULL, outliers, background=FALSE)
+qcplot <- function(object, plotName, col,
+                   plotType=c("boxplot", "sample", "scatter"),
+                   threshold=NULL, showOutliers, background=FALSE)
   {
 
-    type <- match.arg(type)
+    plotType <- match.arg(plotType)
 
-    p <- if(plotType == "MU")
-      plotMU(object, col, location, threshold, outliers, background)
-    else if(plotType == "OP")
-      plotOP(object, col, location, threshold, outliers, background)
-    else if(plotType == "BS")
-      plotBS(object, col, location, threshold, outliers, background)
-    else if(plotType == "HC")
-      plotHC(object, col, location, threshold, outliers, background)
-    else if(plotType == "DP")
-      plotDP(object, col, location, threshold, outliers, background)
+    p <- if(plotName == "MU")
+      plotMU(object, col, threshold, showOutliers, background)
+    else if(plotName == "OP")
+      plotOP(object, col, threshold, showOutliers, background)
+    else if(plotName == "BS")
+      plotBS(object, col, threshold, showOutliers, background)
+    else if(plotName == "HC")
+      plotHC(object, col, threshold, showOutliers, background)
+    else if(plotName == "DP")
+      plotDP(object, col, threshold, showOutliers, background)
     else ##if "BSI", "BSII", "HYB", "NP", "EC", "NC", "SC", "TR", "SPI", "SPII"
-      switch(type,
-             scatter=qcscatterplot(object, plotType, outliers),
-             sample=qcsampleplot(object, plotType, outliers),
-             boxplot=qcboxplot(object, plotType, outliers))
+      switch(plotType,
+             scatter=qcscatterplot(object, plotName, showOutliers),
+             sample=qcsampleplot(object, plotName, showOutliers),
+             boxplot=qcboxplot(object, plotName, showOutliers))
 
     if(any(class(p) %in% "ggplot"))
       return(invisible(print(p)))
@@ -39,15 +39,18 @@ qcplot <- function(object, plotType, col,
       return(invisible(p))
   }
 
-setHighlight <- function(x, y, location)
+setHighlight <- function(x, y)
   {
+    location <- get("location", envir=globalenv())
+    rm(list="location", envir=globalenv())
+
     ##scale x and y range
     location$x <- (location$x - mean(x, na.rm=TRUE))/sd(x, na.rm=TRUE)
     location$y <- (location$y - mean(y, na.rm=TRUE))/sd(y, na.rm=TRUE)
     x <- (x - mean(x, na.rm=TRUE))/sd(x, na.rm=TRUE)
     y <- (y - mean(y, na.rm=TRUE))/sd(y, na.rm=TRUE)
-
     d <- sqrt((x - location$x)^2 + (y - location$y)^2)
+    
     ##clicked in empty space remove highlighted
     if(min(d, na.rm=TRUE) >
        0.05*sqrt(diff(range(x, na.rm=TRUE))^2 + diff(range(y, na.rm=TRUE))^2))
@@ -63,6 +66,7 @@ setHighlight <- function(x, y, location)
         highlight <- names(x)[id]
         assign("highlight", highlight, envir=globalenv())
       }
+
   }
 
 getHighLightIndex <- function()
@@ -74,7 +78,7 @@ setOutliers <- function(outliers, type)
 {
   if(!exists("outliers", envir = globalenv()))
     return(NULL)
-  
+
   out <- get("outliers", envir = globalenv())
   out[, type] <- FALSE ##reset
   out[, type] <- rownames(out) %in% outliers
@@ -85,8 +89,8 @@ getOutliers <- function(sampleIds)
   {
     if(!exists("outliers", envir = globalenv()))
       return(FALSE)
-    
-    outliers <- get("outliers", envir = globalenv())     
+
+    outliers <- get("outliers", envir = globalenv())
     outliers <- rownames(outliers[rowSums(outliers) > 0,, drop=FALSE])
     sampleIds %in% outliers
   }
@@ -112,35 +116,34 @@ prepareData <- function(object)
 ##Added: argument na.rm
 ##       as.matrix in case the RGset contains only one sample
 detectionP <- function (rgSet, type = "m+u", na.rm = FALSE) {
-    locusNames <- getManifestInfo(rgSet, "locusNames")
-    detP <- matrix(NA_real_, ncol=ncol(rgSet), nrow=length(locusNames),
-                   dimnames=list(locusNames, sampleNames(rgSet)))
-    controlIdx <- getControlAddress(rgSet, controlType="NEGATIVE")
-    r <- getRed(rgSet)
-    rBg <- r[controlIdx, ]
-    rMu <- colMedians(as.matrix(rBg), na.rm = na.rm)
-    rSd <- colMads(as.matrix(rBg), na.rm = na.rm)
-    g <- getGreen(rgSet)
-    gBg <- g[controlIdx, ]
-    gMu <- colMedians(as.matrix(gBg), na.rm = na.rm)
-    gSd <- colMads(as.matrix(gBg), na.rm = na.rm)
-    TypeII <- getProbeInfo(rgSet, type="II")
-    TypeI.Red <- getProbeInfo(rgSet, type="I-Red")
-    TypeI.Green <- getProbeInfo(rgSet, type="I-Green")
-    for (i in 1:ncol(rgSet)) {
-      intensity <- r[TypeI.Red$AddressA, i] + r[TypeI.Red$AddressB, i]
-      detP[TypeI.Red$Name, i] <- 1 - pnorm(intensity,
-                                           mean=rMu[i] * 2,
-                                           sd=rSd[i] * 2)
-      intensity <- g[TypeI.Green$AddressA, i] + g[TypeI.Green$AddressB, i]
-      detP[TypeI.Green$Name, i] <- 1 - pnorm(intensity,
-                                             mean=gMu[i] *2,
-                                             sd=gSd[i] * 2)
-      intensity <- r[TypeII$AddressA, i] + g[TypeII$AddressA, i]
-      detP[TypeII$Name, i] <- 1 - pnorm(intensity,
-                                        mean=rMu[i] + gMu[i],
-                                        sd=rSd[i] + gSd[i])
-    }
-    detP
+  locusNames <- getManifestInfo(rgSet, "locusNames")
+  detP <- matrix(NA_real_, ncol=ncol(rgSet), nrow=length(locusNames),
+                 dimnames=list(locusNames, sampleNames(rgSet)))
+  controlIdx <- getControlAddress(rgSet, controlType="NEGATIVE")
+  r <- getRed(rgSet)
+  rBg <- r[controlIdx, ]
+  rMu <- colMedians(as.matrix(rBg), na.rm = na.rm)
+  rSd <- colMads(as.matrix(rBg), na.rm = na.rm)
+  g <- getGreen(rgSet)
+  gBg <- g[controlIdx, ]
+  gMu <- colMedians(as.matrix(gBg), na.rm = na.rm)
+  gSd <- colMads(as.matrix(gBg), na.rm = na.rm)
+  TypeII <- getProbeInfo(rgSet, type="II")
+  TypeI.Red <- getProbeInfo(rgSet, type="I-Red")
+  TypeI.Green <- getProbeInfo(rgSet, type="I-Green")
+  for (i in 1:ncol(rgSet)) {
+    intensity <- r[TypeI.Red$AddressA, i] + r[TypeI.Red$AddressB, i]
+    detP[TypeI.Red$Name, i] <- 1 - pnorm(intensity,
+                                         mean=rMu[i] * 2,
+                                         sd=rSd[i] * 2)
+    intensity <- g[TypeI.Green$AddressA, i] + g[TypeI.Green$AddressB, i]
+    detP[TypeI.Green$Name, i] <- 1 - pnorm(intensity,
+                                           mean=gMu[i] *2,
+                                           sd=gSd[i] * 2)
+    intensity <- r[TypeII$AddressA, i] + g[TypeII$AddressA, i]
+    detP[TypeII$Name, i] <- 1 - pnorm(intensity,
+                                      mean=rMu[i] + gMu[i],
+                                      sd=rSd[i] + gSd[i])
   }
-
+  detP
+}
