@@ -28,9 +28,13 @@ initialize <- function(object, output, thresholds, background)
     dev.off()
     file.remove(tmp)
 
-    ##generate background data and make it accesible for the plotting functions
-    if(!is.null(background))
+    ##generate background data and make it accessible for the plotting functions
+    if(!is.null(background)) {
       assign("background", as.background(background), envir = globalenv())
+      output$showBackground <- renderUI({
+        selectInput("showBackground", "Show background:", c("On", "Off"), selected="On")
+      })
+    }
 
   }
 
@@ -60,11 +64,13 @@ finalize <- function(object)
 
 server450k <- function(object, thresholds, background)
   {
-
     function(input, output, session)
       {
         ##initialize to get all outliers detected do this only once
         initialize(object, output, thresholds, background)
+
+        ##on exit call finalize
+        session$onSessionEnded(function() { stopApp(returnValue=finalize(object)) })
 
         getTabName <- reactive({
           switch(input$pnlMain,
@@ -108,10 +114,17 @@ server450k <- function(object, thresholds, background)
         })
 
         getBackground <- reactive({
-          if(exists("background", envir=globalenv()))
-            return(input$background)
-          else
-            return(FALSE)
+          showBackground <- FALSE
+          if(exists("background", envir=globalenv()) & !is.null(input$showBackground)) {
+            showBackground <- switch(input$showBackground,
+                                     "On" = TRUE,
+                                     "Off" = FALSE)
+          }
+          return(showBackground)
+        })
+
+        showOutliers <- reactive({
+          return(switch(input$showOutliers, "On" = TRUE, "Off" = FALSE))
         })
 
         getPlotArguments <- function()
@@ -128,7 +141,7 @@ server450k <- function(object, thresholds, background)
             args$object <- object
             args$col <- input$colorby ##reactive on metadata
             args$threshold <- thresholds[[getTabName()]]
-            args$showOutliers <- input$showOutliers ##reactive on outliers checkbox
+            args$showOutliers <- showOutliers() ##reactive on outliers checkbox
             args$plotType <- getPlotType() ##reactive on quality control display type
             args$plotName <- getTabName() ##reactive on tab panel switching
             args$background <- getBackground()
@@ -143,21 +156,21 @@ server450k <- function(object, thresholds, background)
 
           ##optionally save plot
           output$save <- downloadHandler(
-            filename=function() {
-              paste0(plotName, ".pdf")
-            },
-            content=function(file) {
-              message(paste("Saving ..."))
-              ##this doesn't work
-              ##ggsave(filename=file,
-              ##plot=do.call(qcplot, args),
-              ##type="cairo-png")
-              pdf(file, width=7, height = 7/2)
-              message(do.call(qcplot, args))
-              dev.off()
-            },
-            ##contentType='image/png'
-            )
+                                         filename=function() {
+                                           paste0(plotName, ".pdf")
+                                         },
+                                         content=function(file) {
+                                           message(paste("Saving ..."))
+                                           ##this doesn't work
+                                           ##ggsave(filename=file,
+                                           ##plot=do.call(qcplot, args),
+                                           ##type="cairo-png")
+                                           pdf(file, width=7, height = 7/2)
+                                           do.call(qcplot, args)
+                                           dev.off()
+                                         },
+                                         ##contentType='image/png'
+                                         )
 
           ##do the plotting
           output[[plotName]] <- renderPlot({ do.call(qcplot, args) })
@@ -174,12 +187,21 @@ server450k <- function(object, thresholds, background)
           return(cbind(ID=rownames(dt), dt))
         })
 
-        ##Stop App
-        observe({
-          if (input$exit == 0)
-            return(NULL)
-          stopApp(returnValue=finalize(object))
-        })
+        ##generate report
+        ## output$downloadReport <- downloadHandler(
+        ##                                          filename = "MethylAid-report.pdf",
+        ##                                          content = function(file) {
+        ##                                            src <- file.path(path.package("MethylAid"), "Report")
+        ##                                            ## temporarily switch to the temp dir, in case you do not have write
+        ##                                            ## permission to the current working directory
+        ##                                            dir.create(file.path(tempdir(), basename(src)))
+        ##                                            file.copy(src, tempdir(), recursive=TRUE)
+        ##                                            owd <- setwd(file.path(tempdir(), basename(src)))
+        ##                                            on.exit(setwd(owd))
+        ##                                            out <- knit("report.Rnw")
+        ##                                            tools::texi2pdf(out)
+        ##                                            file.rename("report.pdf", file)
+        ##                                          })
 
       }
   }

@@ -51,6 +51,9 @@ setHighlight <- function(x, y)
     y <- (y - mean(y, na.rm=TRUE))/sd(y, na.rm=TRUE)
     d <- sqrt((x - location$x)^2 + (y - location$y)^2)
     
+    if(length(d) == 0)
+      return(NULL)
+    
     ##clicked in empty space remove highlighted
     if(min(d, na.rm=TRUE) >
        0.05*sqrt(diff(range(x, na.rm=TRUE))^2 + diff(range(y, na.rm=TRUE))^2))
