@@ -32,7 +32,7 @@ initialize <- function(object, output, thresholds, background)
     if(!is.null(background)) {
       assign("background", as.background(background), envir = globalenv())
       output$showBackground <- renderUI({
-        selectInput("showBackground", "Show background:", c("On", "Off"), selected="On")
+        selectInput("showBackground", "Show background:", c("Off", "On"), selected="On")
       })
     }
 
@@ -77,7 +77,7 @@ server450k <- function(object, thresholds, background)
                  `FC`= input$pnlFC,
                  `SDC`=input$pnlSDC,
                  `SIC`=input$pnlSIC,
-                 `Outliers`="",
+                 `OT`="",
                  `About`="")
         })
 
@@ -127,6 +127,13 @@ server450k <- function(object, thresholds, background)
           return(switch(input$showOutliers, "On" = TRUE, "Off" = FALSE))
         })
 
+        getThreshold <- reactive({
+            tabName <- getTabName()
+            if(any(tabName %in% names(thresholds)))
+              return(thresholds[[tabName]])
+            return(NULL)
+          })
+
         getPlotArguments <- function()
           {
 
@@ -140,7 +147,7 @@ server450k <- function(object, thresholds, background)
             args <- list()
             args$object <- object
             args$col <- input$colorby ##reactive on metadata
-            args$threshold <- thresholds[[getTabName()]]
+            args$threshold <- getThreshold()
             args$showOutliers <- showOutliers() ##reactive on outliers checkbox
             args$plotType <- getPlotType() ##reactive on quality control display type
             args$plotName <- getTabName() ##reactive on tab panel switching
@@ -150,42 +157,42 @@ server450k <- function(object, thresholds, background)
 
         ##create plot
         observe({
-
-          args <- getPlotArguments()
-          plotName <- paste0("plot", args$plotName)
-
-          ##optionally save plot
-          output$save <- downloadHandler(
-                                         filename=function() {
-                                           paste0(plotName, ".pdf")
-                                         },
-                                         content=function(file) {
-                                           message(paste("Saving ..."))
-                                           ##this doesn't work
-                                           ##ggsave(filename=file,
-                                           ##plot=do.call(qcplot, args),
-                                           ##type="cairo-png")
-                                           pdf(file, width=7, height = 7/2)
-                                           do.call(qcplot, args)
-                                           dev.off()
-                                         },
-                                         ##contentType='image/png'
-                                         )
-
-          ##do the plotting
-          output[[plotName]] <- renderPlot({ do.call(qcplot, args) })
+          output[[paste0("plot", getTabName())]] <- renderPlot({ do.call(qcplot, getPlotArguments()) })
         })
 
-        ##show outliers
-        output$Outliers <- renderDataTable({
-
+        getOutliers <- function(){
           dt <- get("outliers", envir = globalenv())
           if(sum(rowSums(dt) > 0) == 0)
-            return(NULL)
+            dt <- NULL
+          else
+            {
+              dt <- dt[rowSums(dt) > 0,,drop=FALSE] ##filter
+              dt <- cbind(ID=rownames(dt), dt)
+            }
+          dt
+        }
 
-          dt <- dt[rowSums(dt) > 0,,drop=FALSE] ##filter
-          return(cbind(ID=rownames(dt), dt))
-        })
+        output$OutlierTable <- renderDataTable({ getOutliers() })
+
+        output$downloadPlot <- downloadHandler(
+          filename=function() {
+            plotName <- paste0("plot", getTabName())
+            paste0(plotName, ".pdf")
+          },
+          content=function(file) {
+            args <- getPlotArguments()
+            pdf(file, width=7, height = 7/2)
+            do.call(qcplot, args)
+            dev.off()
+          })
+
+        output$downloadData <- downloadHandler(
+          filename=function() { "MethylAid_outliers.csv" },
+          content=function(file) {
+            dt <- getOutliers()
+            if(!is.null(dt))
+              write.csv(getOutliers(), file)
+          })
 
         ##generate report
         ## output$downloadReport <- downloadHandler(

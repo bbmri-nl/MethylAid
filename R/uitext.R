@@ -1,6 +1,6 @@
 
 width = "auto"
-height = "600px"
+height = "400px"
 
 start = "<br> <p style=\'width:800px;text-align:justify\'><span style=\'color:#000000;font-size:16px\'>"
   end = "</span></p><br><br>"
