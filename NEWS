@@ -30,10 +30,16 @@ CHANGES IN VERSION 1.1.5
     
     o restructered ui.R
 
-CHANGES IN VERSION 1.1.8
+CHANGES IN VERSION 1.1.9
 -----------------------
     
     o coloring of individual samples add if number
       of is not >25
+
+CHANGES IN VERSION 1.1.10
+-----------------------
+    
+    o added functionality for MethylAidData
+      to show as a reference data set
 
 

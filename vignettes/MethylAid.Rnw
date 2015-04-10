@@ -235,6 +235,51 @@ least set your email address in \Rcode{scripts/summarize.sh} and use the proper
 \R{} executable e.g change this in \Rcode{scripts/summarize.sh} and
 \Rcode{scripts/sge.tmpl}.
 
+
+\section{Customize \Biocpkg{MethylAid}}
+\subsection{User-defined thresholds}
+\Biocpkg{MethylAid} uses pre-defined thresholds in the filter control plots to
+determine outlying samples. These thresholds are based on experience with
+several 450k data sets that were analysed in the Department of Molecular
+Epidemiology (Leiden University Medical Center). The values of these thresholds
+are further supported by a large reference set available from the
+\Biocpkg{MethylAidData}-package. However, if one wished to use customised
+thresholds, e.g. for hydroxymethylation data, these can be given as arguments the
+the \Rfunction{visualize}-function.
+
+<<thresholds, eval=FALSE>>=
+visualize(exampleData,  
+          thresholds = list(MU = 10.5, OP = 11.75, 
+              BS = 12.75, HC = 13.25, DP = 0.95))
+@ 
+
+\subsection{Generating your own reference dataset}
+The \Biocpkg{MethylAidData}-package provides a reference dataset on 2800
+samples. A reference data set can be used to compare with another data set.
+For example, call \Rfunction{visualize} with the argument \Rcode{background} as
+shown below.
+
+<<reference, eval=FALSE>>=
+library(MethylAid)
+data(exampleData) ##500 samples
+library(MethylAidData)
+data(exampleDataLarge) ##2800 samples
+outliers <- visualize(exampleData, background=exampleDataLarge)
+head(outliers)
+@ 
+
+Every dataset that has been summarized by \Biocpkg{MethylAid} can be
+used as a reference data set. Furthermore, different summarized data sets can be
+combined to one bigger reference data set using the \Rfunction{combine}. 
+
+<<combine>>=
+library(MethylAid)
+data(exampleData)
+exampleData
+combine(exampleData, exampleData)
+@ 
+
+
 % \section{TODOs}
 % \begin{itemize}
 % \item add more general reading capabilities

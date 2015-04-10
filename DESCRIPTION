@@ -2,7 +2,7 @@ Package: MethylAid
 Type: Package
 Title: Visual and interactive quality control of large Illumina 450k
         data sets
-Version: 1.1.9
+Version: 1.1.10
 Date: 2015-04-10
 Author: Maarten van Iterson, Elmar. Tobi, Roderick Slieker, 
         Wouter den Hollander, Rene Luijk and Bas Heijmans
@@ -29,6 +29,7 @@ biocViews: DNAMethylation,
 Depends: R (>= 3.0)
 Imports: Biobase, 
          BiocParallel,
+	 BiocGenerics,
          FDb.InfiniumMethylation.hg19,
          ggplot2,
 	 grid,
@@ -40,8 +41,7 @@ Imports: Biobase,
          methods,          
          RColorBrewer, 
          shiny
-Suggests: BiocGenerics, 
-          BiocStyle,           
+Suggests: BiocStyle,           
           knitr,
 	  MethylAidData,
           minfiData, 

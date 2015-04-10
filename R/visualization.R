@@ -7,9 +7,13 @@
 ##' @param object summarizedData object
 ##' @param thresholds default thresholds
 ##' @param background optional summarizedData-object used as background in filter control plots
+##' @param ... for future use
 ##' @return lauches a web browser with the shiny application and returns a
 ##' data.frame with detected outliers
 ##' @import shiny ggplot2 RColorBrewer
+##' @importFrom hexbin hexbin grid.hexagons
+##' @importFrom grid pushViewport popViewport
+##' @importFrom gridBase baseViewports
 ##' @export
 ##' @docType methods
 ##' @examples
@@ -23,7 +27,7 @@
 setGeneric("visualize",
            function(object,
                     thresholds  = list(MU = 10.50, OP = 11.75, BS = 12.75, HC = 13.25, DP = 0.95),
-                    background = NULL)
+                    background = NULL, ...)
            standardGeneric("visualize")
            )
 
@@ -31,9 +35,9 @@ setGeneric("visualize",
 setMethod("visualize", "summarizedData",
           function(object,
                    thresholds = list(MU = 10.50, OP = 11.75, BS = 12.75, HC = 13.25, DP = 0.95),
-                   background = NULL)
+                   background = NULL, ...)
           {
             app <- list(ui=ui450k(object),
-                        server=server450k(object, thresholds = thresholds, background = background))
+                        server=server450k(object, thresholds = thresholds, background = background, ...))
             invisible(runApp(app))
           })

@@ -1,5 +1,5 @@
 ##initializer
-initialize <- function(object, output, thresholds, background)
+initialize <- function(object, output, thresholds, background, ...)
   {
     ##cat("initialize...\n")
 
@@ -62,12 +62,12 @@ finalize <- function(object)
     return(outliers)
   }
 
-server450k <- function(object, thresholds, background)
+server450k <- function(object, thresholds, background, ...)
   {
     function(input, output, session)
       {
         ##initialize to get all outliers detected do this only once
-        initialize(object, output, thresholds, background)
+        initialize(object, output, thresholds, background, ...)
 
         ##on exit call finalize
         session$onSessionEnded(function() { stopApp(returnValue=finalize(object)) })

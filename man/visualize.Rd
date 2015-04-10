@@ -7,10 +7,10 @@
 \title{visualize the summarized 450k data}
 \usage{
 visualize(object, thresholds = list(MU = 10.5, OP = 11.75, BS = 12.75, HC =
-  13.25, DP = 0.95), background = NULL)
+  13.25, DP = 0.95), background = NULL, ...)
 
 \S4method{visualize}{summarizedData}(object, thresholds = list(MU = 10.5, OP =
-  11.75, BS = 12.75, HC = 13.25, DP = 0.95), background = NULL)
+  11.75, BS = 12.75, HC = 13.25, DP = 0.95), background = NULL, ...)
 }
 \arguments{
 \item{object}{summarizedData object}
@@ -18,6 +18,8 @@ visualize(object, thresholds = list(MU = 10.5, OP = 11.75, BS = 12.75, HC =
 \item{thresholds}{default thresholds}
 
 \item{background}{optional summarizedData-object used as background in filter control plots}
+
+\item{...}{for future use}
 }
 \value{
 lauches a web browser with the shiny application and returns a
