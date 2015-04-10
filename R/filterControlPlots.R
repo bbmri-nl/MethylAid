@@ -54,8 +54,10 @@ gcscatterplot <- function(data, x, y, bg=NULL, col="None",
     ##because of merge can introduce "colnames.y"
     cols <- fcols <- factor(data[, 2+pmatch(col, colnames(data)[-c(1:2)])])
 
-    if(nlevels(cols) == length(cols) | nlevels(cols) == 1)
-      cols <- 1
+    if(nlevels(cols) == length(cols) | nlevels(cols) == 1) {
+        if(length(cols) > 25)
+            cols <- 1
+    }
     else if(nlevels(cols) < 10) ##qualitative colors minimal is three
       levels(cols) <- brewer.pal(max(3, nlevels(cols)),"Set1")[1:nlevels(cols)]
     else

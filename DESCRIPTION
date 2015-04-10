@@ -2,8 +2,8 @@ Package: MethylAid
 Type: Package
 Title: Visual and interactive quality control of large Illumina 450k
         data sets
-Version: 1.1.8
-Date: 2015-03-29
+Version: 1.1.9
+Date: 2015-04-10
 Author: Maarten van Iterson, Elmar. Tobi, Roderick Slieker, 
         Wouter den Hollander, Rene Luijk and Bas Heijmans
 Maintainer: M. van Iterson <m.van_iterson@lumc.nl>
@@ -43,6 +43,7 @@ Imports: Biobase,
 Suggests: BiocGenerics, 
           BiocStyle,           
           knitr,
+	  MethylAidData,
           minfiData, 
           RUnit
 

@@ -30,4 +30,10 @@ CHANGES IN VERSION 1.1.5
     
     o restructered ui.R
 
+CHANGES IN VERSION 1.1.8
+-----------------------
+    
+    o coloring of individual samples add if number
+      of is not >25
+
 
