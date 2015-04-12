@@ -83,13 +83,16 @@ reduce <- function(summarizedDataList)
         sData
     }
 
-.combine <- function(object, ..., by=c("identical", "overlap")) {
+.combine <- function(x, y, by=c("identical", "overlap")) {
+    message("combining summarizedData objects")
     
     by <- match.arg(by)
 
-    summarizedDataList <- c(object, list(...))
+    summarizedDataList <- c(x, y)
     names(summarizedDataList) <- as.character(as.list(substitute(summarizedDataList))[-1])
 
+    message(paste(str(summarizedDataList)))
+    
     ##check and adjust target info of the summarizedData objects
     colNamesTargets <- lapply(summarizedDataList, function(x) colnames(x@targets))
     if(by == "identical")
@@ -125,7 +128,7 @@ reduce <- function(summarizedDataList)
 
 ##' @title concatenate two summarizedData objects into one object
 ##' @param x summarizedData-object
-##' @param ... onne or more summarizedData-object
+##' @param y summarizedData-object
 ##' @param by argument indicating how the targets information should be combined
 ##' @return one summarizedData object
 ##' @importFrom BiocGenerics combine
@@ -135,8 +138,8 @@ reduce <- function(summarizedDataList)
 ##' data(exampleData)
 ##' combine(exampleData, exampleData)
 setMethod("combine", "summarizedData",
-          function(x, ..., by=c("identical", "overlap")) {
-              .combine(x, ...)
+          function(x, y, by=c("identical", "overlap")) {
+              .combine(x, y)
           })
 
 ##' Generate background data from a summarizedData-object

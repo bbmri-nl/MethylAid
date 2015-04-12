@@ -5,12 +5,12 @@
 \alias{combine,summarizedData,ANY-method}
 \title{concatenate two summarizedData objects into one object}
 \usage{
-\S4method{combine}{summarizedData,ANY}(x, ..., by = c("identical", "overlap"))
+\S4method{combine}{summarizedData,ANY}(x, y, by = c("identical", "overlap"))
 }
 \arguments{
 \item{x}{summarizedData-object}
 
-\item{...}{onne or more summarizedData-object}
+\item{y}{summarizedData-object}
 
 \item{by}{argument indicating how the targets information should be combined}
 }
