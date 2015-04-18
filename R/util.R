@@ -16,7 +16,7 @@ qcplot <- function(object, plotName, col,
   {
 
     plotType <- match.arg(plotType)
-
+    message(plotType)
     p <- if(plotName == "MU")
       plotMU(object, col, threshold, showOutliers, background)
     else if(plotName == "OP")

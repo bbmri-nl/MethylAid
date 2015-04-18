@@ -108,8 +108,8 @@ server450k <- function(object, thresholds, background, ...)
 
         getPlotType <- reactive({
           switch(input$pnlMain,
-                 `SDC`= input$plotType,
-                 `SIC`= input$plotType,
+                 `SDC`= input$plotTypeSDC,
+                 `SIC`= input$plotTypeSIC,
                  "scatter")
         })
 

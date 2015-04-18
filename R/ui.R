@@ -26,12 +26,12 @@ ui450k <- function(object)
                                                    ),
 
                                   conditionalPanel(condition = gsub("%s", "input.", condSDC),
-                                                   selectInput("plotType", "Plot type:", c("boxplot", "sample", "scatter"), "sample"), br(),
+                                                   selectInput("plotTypeSDC", "Plot type:", c("boxplot", "sample", "scatter"), "sample"), br(),
                                                    helpText(htSDC)
                                                    ),
 
                                   conditionalPanel(condition = gsub("%s", "input.", condSIC),
-                                                   selectInput("plotType", "Plot type:", c("boxplot", "sample", "scatter"), "sample"), br(),
+                                                   selectInput("plotTypeSIC", "Plot type:", c("boxplot", "sample", "scatter"), "sample"), br(),
                                                    helpText(htSIC)
                                                    ),
                                   br(), br(),
