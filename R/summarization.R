@@ -17,8 +17,7 @@
 ##' @import minfi IlluminaHumanMethylation450kmanifest
 ##' FDb.InfiniumMethylation.hg19 BiocParallel
 ##' @importFrom matrixStats colMedians colMads
-##' @importFrom Biobase AnnotatedDataFrame
-##' @importFrom Biobase varMetadata
+##' @importFrom Biobase AnnotatedDataFrame varMetadata
 ##' @return summarized data is saved optionally returned
 ##' @author mvaniterson
 ##' @examples
