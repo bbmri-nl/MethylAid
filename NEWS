@@ -1,3 +1,9 @@
+CHANGES IN VERSION 1.2.4
+-----------------------
+
+Fixed bug in color labels if the number of samples is below 25
+
+
 CHANGES IN VERSION 1.2.2
 -----------------------
 

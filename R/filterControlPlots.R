@@ -7,6 +7,7 @@ ggplot2base <- function(x, y, bg, ...)
          border=NA)
 
     ##add smooth background
+    pch <- 16
     if(!is.null(bg))
       {
 
@@ -19,6 +20,7 @@ ggplot2base <- function(x, y, bg, ...)
         pushViewport(vps$inner, vps$figure, vps$plot)
         grid.hexagons(h, colramp = colorRampPalette(blues9[-9]))
         popViewport()
+        pch <- 1
 
       }
 
@@ -38,7 +40,7 @@ ggplot2base <- function(x, y, bg, ...)
     abline(v=xax, col="white", lwd=1.3)
     abline(v=xax[-length(xax)] + diff(xax)[1]/2, col="white", lwd=0.5)
 
-    points(x, y, pch=1, ...)
+    points(x, y, pch=pch, ...)
     par(op)
   }
 
@@ -54,10 +56,8 @@ gcscatterplot <- function(data, x, y, bg=NULL, col="None",
     ##because of merge can introduce "colnames.y"
     cols <- fcols <- factor(data[, 2+pmatch(col, colnames(data)[-c(1:2)])])
 
-    if(nlevels(cols) == length(cols) | nlevels(cols) == 1) {
-        if(length(cols) > 25)
-            cols <- 1
-    }
+    if(length(cols) > 25 & nlevels(cols) == length(cols) | nlevels(cols) == 1)
+        cols <- 1
     else if(nlevels(cols) < 10) ##qualitative colors minimal is three
       levels(cols) <- brewer.pal(max(3, nlevels(cols)),"Set1")[1:nlevels(cols)]
     else
@@ -86,7 +86,7 @@ gcscatterplot <- function(data, x, y, bg=NULL, col="None",
     else
       abline(h=threshold, col=1, lty=2)
 
-    if(nlevels(fcols) > 1 & nlevels(fcols) != length(fcols))
+    if(nlevels(cols) > 1 & nlevels(cols) <= 25)
       legend("topleft", levels(fcols), ncol=nlevels(fcols)%/%15 + 1, pch=1,
              text.col=levels(cols), col=levels(cols), title=col,
              title.col=1, bty="n")

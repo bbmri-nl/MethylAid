@@ -1,7 +1,6 @@
 % \VignetteIndexEntry{MethylAid: Visual and interactive quality control of large Illumina 450k data sets}
 % \VignettePackage{MethylAid}
 % \VignetteEngine{knitr::knitr}
-
 \documentclass[12pt]{article}
 \usepackage[english]{babel} %%remove tildes e.q. in bibliography
 
