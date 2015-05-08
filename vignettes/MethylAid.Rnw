@@ -108,16 +108,17 @@ you see and can do.
 
 \begin{figure}
    \centering
-   \includegraphics[width=\textwidth]{screenshot_MethylAid}
+   \includegraphics[width=\textwidth]{MethylAid124}
    \caption{Screen shot \Rpackage{MethylAid} interactive web application: The web interface 
      contains three parts; a panel with widgets to control the appearance of the quality 
      control plots, tab-panels for chosing the quality control plot of interest and the 
      interactive plotting area. When the interactive web application is launched the
      rotated M versus U plot is shown. Here using example data from the package on 500
      450k human methylation samples with selected ``scan\_batches'' using the input selector
-     widget ``highlight metadata column''. The different ``scan\_batches'' are indicated 
+     widget ``Color by''. The different ``scan\_batches'' are indicated 
      with different colors. The dashed-vertical line indicated the filter threshold, 
-     samples below the threshold should be removed.}
+     samples below the threshold should be removed. In this example also a background dataset
+     is loaded represented by the blue hexagonal bins, see \Biocexptpkg{MethylAidData}.}
    \label{screenshot_MethylAid}
 \end{figure}
 
@@ -253,7 +254,7 @@ visualize(exampleData,
 @ 
 
 \subsection{Generating your own reference dataset}
-The \Biocpkg{MethylAidData}-package provides a reference dataset on 2800
+The \Biocexptpkg{MethylAidData}-package provides a reference dataset on 2800
 samples. A reference data set can be used to compare with another data set.
 For example, call \Rfunction{visualize} with the argument \Rcode{background} as
 shown below.
