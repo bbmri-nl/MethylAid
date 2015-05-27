@@ -81,28 +81,28 @@ server450k <- function(object, thresholds, background, ...)
                  `About`="")
         })
 
-        clickIdMU <- reactive({
-          location <- list(x=input$clickIdMU$x, y=input$clickIdMU$y)
+        clickMU <- reactive({
+          location <- list(x=input$clickMU$x, y=input$clickMU$y)
           assign("location", location, envir=globalenv())
         })
 
-        clickIdOP <- reactive({
-          location <- list(x=input$clickIdOP$x, y=input$clickIdOP$y)
+        clickOP <- reactive({
+          location <- list(x=input$clickOP$x, y=input$clickOP$y)
           assign("location", location, envir=globalenv())
         })
 
-        clickIdBS <- reactive({
-          location <- list(x=input$clickIdBS$x, y=input$clickIdBS$y)
+        clickBS <- reactive({
+          location <- list(x=input$clickBS$x, y=input$clickBS$y)
           assign("location", location, envir=globalenv())
         })
 
-        clickIdHC <- reactive({
-          location <- list(x=input$clickIdHC$x, y=input$clickIdHC$y)
+        clickHC <- reactive({
+          location <- list(x=input$clickHC$x, y=input$clickHC$y)
           assign("location", location, envir=globalenv())
         })
 
-        clickIdDP <- reactive({
-          location <- list(x=input$clickIdDP$x, y=input$clickIdDP$y)
+        clickDP <- reactive({
+          location <- list(x=input$clickDP$x, y=input$clickDP$y)
           assign("location", location, envir=globalenv())
         })
 
@@ -137,11 +137,11 @@ server450k <- function(object, thresholds, background, ...)
         getPlotArguments <- function()
           {
 
-            clickIdMU()
-            clickIdOP()
-            clickIdBS()
-            clickIdHC()
-            clickIdDP()
+            clickMU()
+            clickOP()
+            clickBS()
+            clickHC()
+            clickDP()
 
             ##construct plotting arguments
             args <- list()
