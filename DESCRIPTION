@@ -1,49 +1,62 @@
 Package: MethylAid
 Type: Package
 Title: Visual and interactive quality control of large Illumina 450k
-        data sets
-Version: 1.5.0
-Date: 2015-04-12
-Author: Maarten van Iterson, Elmar. Tobi, Roderick Slieker, 
-        Wouter den Hollander, Rene Luijk and Bas Heijmans
-Maintainer: M. van Iterson <m.van_iterson@lumc.nl>
+    data sets
+Version: 1.5.2
+Date: 2016-03-22
+Authors@R: c(person("Maarten", "van Iterson",
+        email="mviterson@gmail.com", role="cre"),
+	person("Elmar", "Tobi", role="ctb"),
+	person("Roderick", "Slieker", role="ctb"),
+	person("Wouter", "den Hollander", role="ctb"),
+	person("Rene", "Luijk", role="ctb"),
+	person("Bas", "Heijmans", role="ctb"))
+Author: Maarten van Iterson [aut, cre], Elmar Tobi[ctb],
+        Roderick Slieker[ctb], Wouter den Hollander[ctb],
+	Rene Luijk[ctb] and Bas Heijmans[ctb]
+Maintainer: M. van Iterson <mviterson@gmail.com>
 Description: A visual and interactive web application using RStudio's
-        shiny package. Bad quality samples are detected using
-        sample-dependent and sample-independent controls present on the
-        array and user adjustable thresholds. In depth exploration of
-        bad quality samples can be performed using several interactive
-        diagnostic plots of the quality control probes present on the
-        array. Furthermore, the impact of any batch effect provided by
-        the user can be explored.
+    shiny package. Bad quality samples are detected using
+    sample-dependent and sample-independent controls present on the
+    array and user adjustable thresholds. In depth exploration of
+    bad quality samples can be performed using several interactive
+    diagnostic plots of the quality control probes present on the
+    array. Furthermore, the impact of any batch effect provided by
+    the user can be explored.
 URL: http://shiny.bioexp.nl/MethylAid
 License: GPL (>= 2)
 VignetteBuilder: knitr
-biocViews: DNAMethylation, 
-           MethylationArray, 
-           Microarray, 
-           TwoChannel, 
-           QualityControl, 
-           BatchEffect,
-           Visualization, 
-           GUI
-Depends: R (>= 3.0)
-Imports: Biobase, 
-         BiocParallel,
-	 BiocGenerics,
-         FDb.InfiniumMethylation.hg19,
-         ggplot2,
-	 grid,
-	 gridBase,
-         hexbin,
-         IlluminaHumanMethylation450kmanifest,
-         matrixStats, 
-         minfi, 
-         methods,          
-         RColorBrewer, 
-         shiny
-Suggests: BiocStyle,           
-          knitr,
-	  MethylAidData,
-          minfiData, 
-          RUnit
-
+biocViews: DNAMethylation,
+    MethylationArray,
+    Microarray,
+    TwoChannel,
+    QualityControl,
+    BatchEffect,
+    Visualization,
+    GUI
+Depends:
+    R (>= 3.0)
+Imports:
+    Biobase,
+    BiocParallel,
+    BiocGenerics,
+    ggplot2,
+    grid,
+    gridBase,
+    grDevices,
+    graphics,
+    hexbin,
+    matrixStats,
+    minfi,
+    methods,
+    RColorBrewer,
+    shiny,
+    stats,
+    utils
+Suggests:
+    BiocStyle,
+    knitr,
+    MethylAidData,
+    minfiData,
+    RUnit
+RoxygenNote: 5.0.1

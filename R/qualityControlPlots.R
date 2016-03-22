@@ -4,7 +4,7 @@ qcscatterplot <- function(object, plotType, showOutliers)
     data <- data[grepl(qcProbes[plotType], data$Type),]
     data <- droplevels(data)
 
-    gp <- ggplot(data, aes_string(x="IntRed", y="IntGrn", colour = "Name"))
+    gp <- ggplot(data, aes_string(x="IntRed", y="IntGrn", colour = "ExtendedType"))
     gp <- gp + geom_point()
     gp <- gp + ggtitle(unique(data$Type))
     gp <- gp + xlab(expression(paste(log[2], "Probe Intensity (Red)")))
@@ -50,7 +50,7 @@ qcsampleplot <- function(object, plotType, showOutliers)
     if(length(unique(sampleNames)) > 100)
       data$Samples <- 1:nrow(data)
 
-    gp <- ggplot(data, aes_string(x="Samples", y="Intensity", colour = "Name"))
+    gp <- ggplot(data, aes_string(x="Samples", y="Intensity", colour = "ExtendedType"))
     gp <- gp + geom_point()
     gp <- gp + ggtitle(unique(data$Type))
     gp <- gp + theme(axis.text.x = element_text(angle = 90, hjust = 1))
@@ -91,7 +91,7 @@ qcboxplot <- function(object, plotType, showOutliers)
     data <- rbind(dGrn, dRed)
 
     gp <- ggplot(data,
-                 aes_string(x = "Channel", y = "Intensity", colour = "Name"))
+                 aes_string(x = "Channel", y = "Intensity", colour = "ExtendedType"))
     gp <- gp + geom_boxplot()
     gp <- gp + ggtitle(unique(data$Type))
     gp <- gp + ylab(expression(paste(log[2], "Probe Intensity")))

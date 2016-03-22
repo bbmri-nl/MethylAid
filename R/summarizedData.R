@@ -32,11 +32,10 @@ setClass(
         DPfreq="vector",
         MU="matrix",
         plotdata="list"
-        )
     )
+)
 
-printSummarizedData <- function(object)
-{
+printSummarizedData <- function(object) {
     nSamples <- nrow(object@targets)
     cat(class(object), " object with ", nSamples, " samples.\n",
         "Containing: median Methylated and Unmethylation values,\n",
@@ -59,62 +58,61 @@ printSummarizedData <- function(object)
 setMethod("show", "summarizedData",
           function(object) printSummarizedData(object))
 
-reduce <- function(summarizedDataList)
+reduce <- function(summarizedDataList) {
+    targets <- controls <- Rcontrols <- Gcontrols <- MU <- DPfreq <- c()
+    n <- length(summarizedDataList)
+    for(i in 1:n)
     {
-        targets <- controls <- Rcontrols <- Gcontrols <- MU <- DPfreq <- c()
-        n <- length(summarizedDataList)
-        for(i in 1:n)
-            {
-                summarizedData <- summarizedDataList[[i]]
-                targets <- rbind(targets, summarizedData@targets)
-                Rcontrols <- cbind(Rcontrols, summarizedData@Rcontrols)
-                Gcontrols <- cbind(Gcontrols, summarizedData@Gcontrols)
-                MU <- cbind(MU, summarizedData@MU)
-                DPfreq <- c(DPfreq, summarizedData@DPfreq)
-            }
-
-        sData <- new("summarizedData",
-                     targets=as.data.frame(targets),
-                     controls=summarizedData@controls,
-                     Rcontrols=as.matrix(Rcontrols),
-                     Gcontrols=as.matrix(Gcontrols),
-                     MU=as.matrix(MU),
-                     DPfreq=DPfreq) ##not as.vector otherwise names attribute is dropped
-        sData
+        summarizedData <- summarizedDataList[[i]]
+        targets <- rbind(targets, summarizedData@targets)
+        Rcontrols <- cbind(Rcontrols, summarizedData@Rcontrols)
+        Gcontrols <- cbind(Gcontrols, summarizedData@Gcontrols)
+        MU <- cbind(MU, summarizedData@MU)
+        DPfreq <- c(DPfreq, summarizedData@DPfreq)
     }
+
+    sData <- new("summarizedData",
+                 targets=as.data.frame(targets),
+                 controls=summarizedData@controls,
+                 Rcontrols=as.matrix(Rcontrols),
+                 Gcontrols=as.matrix(Gcontrols),
+                 MU=as.matrix(MU),
+                 DPfreq=DPfreq) ##not as.vector otherwise names attribute is dropped
+    sData
+}
 
 .combine <- function(x, y, by=c("identical", "overlap")) {
     message("combining summarizedData objects")
-    
+
     by <- match.arg(by)
 
     summarizedDataList <- c(x, y)
     names(summarizedDataList) <- as.character(as.list(substitute(summarizedDataList))[-1])
 
     message(paste(str(summarizedDataList)))
-    
+
     ##check and adjust target info of the summarizedData objects
     colNamesTargets <- lapply(summarizedDataList, function(x) colnames(x@targets))
     if(by == "identical")
-        {
-            if(any(table(unlist(colNamesTargets)) != length(summarizedDataList)))
-                stop(paste("Target information is not the same for all summarizedData-objects.\n",
-                           "Consider using argument 'by = overlap'!"))
-        }
+    {
+        if(any(table(unlist(colNamesTargets)) != length(summarizedDataList)))
+            stop(paste("Target information is not the same for all summarizedData-objects.\n",
+                       "Consider using argument 'by = overlap'!"))
+    }
     else if(by == "overlap")
+    {
+        if(any(table(unlist(colNamesTargets)) != length(summarizedDataList)))
         {
-            if(any(table(unlist(colNamesTargets)) != length(summarizedDataList)))
-                {
-                    cols <- colNamesTargets[[1]]
-                    for(i in 2:length(colNamesTargets))
-                        cols <- intersect(cols, colNamesTargets[[i]])
-                    for(i in 1:length(colNamesTargets))
-                        {
-                            targets <- summarizedDataList[[i]]@targets
-                            summarizedDataList[[i]]@targets <- targets[, match(cols, colnames(targets))]
-                        }
-                }
+            cols <- colNamesTargets[[1]]
+            for(i in 2:length(colNamesTargets))
+                cols <- intersect(cols, colNamesTargets[[i]])
+            for(i in 1:length(colNamesTargets))
+            {
+                targets <- summarizedDataList[[i]]@targets
+                summarizedDataList[[i]]@targets <- targets[, match(cols, colnames(targets))]
+            }
         }
+    }
 
     ##add summarizedData-object name to targets info
     for(i in 1:length(summarizedDataList))
@@ -126,7 +124,10 @@ reduce <- function(summarizedDataList)
     summarizedDataList
 }
 
-##' @title concatenate two summarizedData objects into one object
+##' Concatenates two summarizedData objects into one object
+##'
+##'
+##' @title concatenates two summarizedData objects into one object
 ##' @param x summarizedData-object
 ##' @param y summarizedData-object
 ##' @param by argument indicating how the targets information should be combined
@@ -168,18 +169,18 @@ setMethod("as.background", "summarizedData",
               ##NP
               data <- object@plotdata
               d <- data[grepl(qcProbes["NP"], data$Type),]
-              dGrn <- d[d$Name %in% c("NP (C)", "NP (G)"), c(1:5,7)]
+              dGrn <- d[d$ExtendedType %in% c("NP (C)", "NP (G)"), c(1:5,7)]
               x <- tapply(dGrn$IntGrn, dGrn$Samples, mean)
-              dRed <- d[d$Name %in% c("NP (A)", "NP (T)"), c(1:6)]
+              dRed <- d[d$ExtendedType %in% c("NP (A)", "NP (T)"), c(1:6)]
               y <- tapply(dRed$IntRed, dRed$Samples, mean)
               bgNP <- rotateData(data.frame(x=x, y=y), columns=c("x", "y"))
 
               ##BSI
               data <- object@plotdata
               d <- data[grepl(qcProbes["BSI"], data$Type),]
-              dGrn <- d[grepl("C1|C2|C3", d$Name), c(1:5,7)]
+              dGrn <- d[grepl("C1|C2|C3", d$ExtendedType), c(1:5,7)]
               x <- tapply(dGrn$IntGrn, dGrn$Samples, mean)
-              dRed <- d[grepl("C4|C5|C6", d$Name), c(1:6)]
+              dRed <- d[grepl("C4|C5|C6", d$ExtendedType), c(1:6)]
               y <- tapply(dRed$IntRed, dRed$Samples, mean)
               bgBSI <- rotateData(data.frame(x=x, y=y), columns=c("x", "y"))
 
@@ -187,9 +188,31 @@ setMethod("as.background", "summarizedData",
               data <- object@plotdata
               d <- data[grepl(qcProbes["HYB"], data$Type),]
               d <- d[order(d$Samples),]
-              x <- 0.5*(d$IntGrn[grepl("High", d$Name)] + d$IntGrn[grepl("Low", d$Name)])
-              y <- d$IntGrn[grepl("High", d$Name)] - d$IntGrn[grepl("Low", d$Name)]
+              x <- 0.5*(d$IntGrn[grepl("High", d$ExtendedType)] + d$IntGrn[grepl("Low", d$ExtendedType)])
+              y <- d$IntGrn[grepl("High", d$ExtendedType)] - d$IntGrn[grepl("Low", d$ExtendedType)]
               bgHYB <- data.frame(x, y)
 
               list(MU = bgMU, NP = bgNP, BSI = bgBSI, HYB = bgHYB)
+          })
+
+setGeneric("updateObject", 
+           function(object)
+               standardGeneric("updateObject")
+           )
+
+setMethod("updateObject", "summarizedData",
+          function(object) {
+              old <- c("Color_Channel", "Name")
+              new <- c("Color", "ExtendedType")
+              if(!is.null(object)) {
+                  if(sum(colnames(object@plotdata) %in% old) == 2) {
+                      colnames(object@plotdata)[colnames(object@plotdata) %in% old] <- new
+                  }
+              }
+              object
+          })
+
+setMethod("updateObject", "ANY",
+          function(object) {
+              object
           })

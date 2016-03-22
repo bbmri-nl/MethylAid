@@ -104,7 +104,7 @@ prepareData <- function(object)
     R <- log2(object@Rcontrols)
     G <- log2(object@Gcontrols)
 
-    hm450.controls <- object@controls[!(object@controls$Type %in%
+    controls <- object@controls[!(object@controls$Type %in%
                                         c("NORM_A", "NORM_G", "NORM_C", "NORM_T")), ] ##not used yet!
 
     data <- data.frame(Address=rep(rownames(R), ncol(R)),
@@ -112,13 +112,14 @@ prepareData <- function(object)
                        IntRed=as.vector(R),
                        IntGrn=as.vector(G))
 
-    merge(hm450.controls, data)
+    merge(controls, data)
   }
 
 ##Taken from minfi
 ##Added: argument na.rm
 ##       as.matrix in case the RGset contains only one sample
 detectionP <- function (rgSet, type = "m+u", na.rm = FALSE) {
+    
   locusNames <- getManifestInfo(rgSet, "locusNames")
   detP <- matrix(NA_real_, ncol=ncol(rgSet), nrow=length(locusNames),
                  dimnames=list(locusNames, sampleNames(rgSet)))

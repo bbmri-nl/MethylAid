@@ -14,12 +14,16 @@
 ##' @importFrom hexbin hexbin grid.hexagons
 ##' @importFrom grid pushViewport popViewport
 ##' @importFrom gridBase baseViewports
+##' @importFrom grDevices dev.off pdf blues9 colorRampPalette
+##' @importFrom graphics abline axTicks axis legend par plot points rect text
+##' @importFrom stats na.omit pnorm sd
+##' @importFrom utils str write.csv
 ##' @export
 ##' @docType methods
 ##' @examples
 ##' library(minfiData)
 ##' baseDir <- system.file("extdata", package="minfiData")
-##' targets <- read.450k.sheet(baseDir)
+##' targets <- read.metharray.exp(baseDir)
 ##' data <- summarize(targets)
 ##' \dontrun{
 ##' visualize(data)
@@ -28,16 +32,17 @@ setGeneric("visualize",
            function(object,
                     thresholds  = list(MU = 10.50, OP = 11.75, BS = 12.75, HC = 13.25, DP = 0.95),
                     background = NULL, ...)
-           standardGeneric("visualize")
+               standardGeneric("visualize")
            )
 
 ##' @rdname visualize
 setMethod("visualize", "summarizedData",
           function(object,
                    thresholds = list(MU = 10.50, OP = 11.75, BS = 12.75, HC = 13.25, DP = 0.95),
-                   background = NULL, ...)
-          {
-            app <- list(ui=ui450k(object),
-                        server=server450k(object, thresholds = thresholds, background = background, ...))
-            invisible(runApp(app))
+                   background = NULL, ...){
+              object <- updateObject(object) ##for visualize MethylAid version 1.5.1              
+              background <- updateObject(background)
+              app <- list(ui=ui450k(object),
+                          server=server450k(object, thresholds = thresholds, background = background, ...))
+              invisible(runApp(app))
           })

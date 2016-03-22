@@ -64,7 +64,7 @@ This example shows how to summarize a small set of idat files e.g. the
 summarized data fits into the available RAM. The \Biocexptpkg{minfiData}-package
 provides such a set. The package contains 450k DNA methylation data on 6 samples
 across 2 groups. Since, \Biocpkg{MethylAid} uses internally the function 
-\Rfunction{read.450k.exp} from the \Biocpkg{minfi}-package\cite{Aryee2014}, target
+\Rfunction{read.metharray.exp} from the \Biocpkg{minfi}-package\cite{Aryee2014}, target
 information should be provided in a similar way as is done when using the 
 \Biocpkg{minfi}-package.
 
@@ -72,7 +72,7 @@ information should be provided in a similar way as is done when using the
 library(MethylAid)
 library(minfiData)
 baseDir <- system.file("extdata", package = "minfiData")
-targets <- read.450k.sheet(baseDir)
+targets <- read.metharray.exp(baseDir, recursive=TRUE)
 @
 
 The function \Rfunction{summarize} performs the summarization of the the control
