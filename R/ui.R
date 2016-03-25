@@ -41,7 +41,6 @@ ui450k <- function(object) {
 
                                         ## downloadButton("downloadReport", "Generate report")
                                     )
-
                                     )
                    ),
 

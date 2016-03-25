@@ -64,7 +64,11 @@ server450k <- function(object, thresholds, background, ...) {
 
         object <- updateObject(object)
         background <- updateObject(background)
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> add updateObject function to server and ui
         ##initialize to get all outliers detected do this only once
         initialize(object, output, thresholds, background, ...)
 
