@@ -1,5 +1,7 @@
 ui450k <- function(object) {
 
+    object <- updateObject(object)
+
     condFC <- "%spnlMain == 'FC' && (%spnlFC == 'MU' || %spnlFC == 'OP' || %spnlFC == 'BS' || %spnlFC == 'HC' || %spnlFC == 'DP')"
     condSDC <- "%spnlMain ==  'SDC' && (%spnlSDC == 'BSI' || %spnlSDC == 'BSII' || %spnlSDC == 'SPI' || %spnlSDC == 'SPII' || %spnlSDC == 'NP')"
     condSIC <- "%spnlMain == 'SIC' && (%spnlSIC == 'SC' || %spnlSIC == 'TR' || %spnlSIC == 'EC' || %spnlSIC == 'HYB')"
@@ -38,7 +40,7 @@ ui450k <- function(object) {
                                         downloadLink("downloadPlot", "Save current plot")
 
                                         ## downloadButton("downloadReport", "Generate report")
-                                        )
+                                    )
                                     )
                    ),
 
@@ -151,6 +153,6 @@ ui450k <- function(object) {
 
                                )
                    )
-            )
         )
+    )
 }
