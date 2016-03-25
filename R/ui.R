@@ -40,7 +40,7 @@ ui450k <- function(object) {
                                         downloadLink("downloadPlot", "Save current plot")
 
                                         ## downloadButton("downloadReport", "Generate report")
-                                    )
+                                        )
                                     )
                    ),
 
@@ -153,7 +153,6 @@ ui450k <- function(object) {
 
                                )
                    )
+            )
         )
-    )
-
 }
