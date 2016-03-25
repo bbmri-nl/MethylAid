@@ -23,7 +23,7 @@
 ##' @examples
 ##' library(minfiData)
 ##' baseDir <- system.file("extdata", package="minfiData")
-##' targets <- read.metharray.exp(baseDir)
+##' targets <- read.metharray.sheet(baseDir)
 ##' data <- summarize(targets)
 summarize <- function(targets, batchSize=-1, BPPARAM=NULL, rp.zero=TRUE,
                       verbose=TRUE, file=NULL) {

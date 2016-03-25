@@ -89,7 +89,7 @@ reduce <- function(summarizedDataList) {
     summarizedDataList <- c(x, y)
     names(summarizedDataList) <- as.character(as.list(substitute(summarizedDataList))[-1])
 
-    message(paste(str(summarizedDataList)))
+    ##message(paste(str(summarizedDataList)))
 
     ##check and adjust target info of the summarizedData objects
     colNamesTargets <- lapply(summarizedDataList, function(x) colnames(x@targets))

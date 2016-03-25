@@ -72,7 +72,7 @@ information should be provided in a similar way as is done when using the
 library(MethylAid)
 library(minfiData)
 baseDir <- system.file("extdata", package = "minfiData")
-targets <- read.metharray.exp(baseDir, recursive=TRUE)
+targets <- read.metharray.sheet(baseDir)
 @
 
 The function \Rfunction{summarize} performs the summarization of the the control

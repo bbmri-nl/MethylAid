@@ -37,7 +37,7 @@ the MethylAid vignette for examples.
 \examples{
 library(minfiData)
 baseDir <- system.file("extdata", package="minfiData")
-targets <- read.metharray.exp(baseDir)
+targets <- read.metharray.sheet(baseDir)
 data <- summarize(targets)
 }
 \author{
