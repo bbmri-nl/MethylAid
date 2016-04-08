@@ -1,4 +1,4 @@
-% \VignetteIndexEntry{MethylAid: Visual and interactive quality control of large Illumina 450k data sets}
+% \VignetteIndexEntry{MethylAid: Visual and Interactive quality control of Illumina Human DNA Methylation array data}
 % \VignettePackage{MethylAid}
 % \VignetteEngine{knitr::knitr}
 
@@ -15,8 +15,7 @@ BiocStyle::latex()
   \\Department of Molecular Epidemiology,
   \\Leiden University Medical Center, Leiden, The Netherlands}
 
-\title{MethylAid: Visual and interactive quality control of large Illumina 450k
-  data sets}
+\title{MethylAid: Visual and Interactive quality control of Illumina Human DNA Methylation array data}
 
 \begin{document}
 
@@ -26,13 +25,15 @@ BiocStyle::latex()
 
 \section{Introduction}
 
-\Biocpkg{MethylAid} is specially designed for quality control of large sets of
-DNA methylation data e.g., epigenomewide association studies (EWAS). Extracting 
-intensities from IDAT files can be done in batches and/or in parallel to reduce 
-memory load and/or overcome long run-times. It requires two function calls in 
-going from IDAT files to launch the interactive web application; 
-\Rfunction{summarize} and \Rfunction{visualize}. For more information see 
-van Iterson \emph{et al.} \cite{iterson2014}.
+\Biocpkg{MethylAid} is specially designed for quality control of large
+sets of Illumina Human DNA methylation array data sets e.g.,
+epigenomewide association studies (EWAS) using the 450k or 850k (EPIC)
+arrays. Extracting intensities from IDAT files can be done in batches
+and/or in parallel to reduce memory load and/or overcome long
+run-times. It requires two function calls in going from IDAT files to
+launch the interactive web application; \Rfunction{summarize} and
+\Rfunction{visualize}. For more information see van Iterson 
+\emph{et al.} \cite{iterson2014}.
 
 To show the utility of \Biocpkg{MethylAid}, we first show a quick example using
 a small set of idat files taken from the \Biocexptpkg{minfiData} package. A
@@ -278,22 +279,6 @@ data(exampleData)
 exampleData
 combine(exampleData, exampleData)
 @ 
-
-
-% \section{TODOs}
-% \begin{itemize}
-% \item add more general reading capabilities
-% \item subset data to be visualized using a column and value of the targets file
-% \item Functionality for 27k arrays (maybe in old version minfi)
-% \item Somehow show NA's in plots
-% \item Zoom option filter-plots
-% \item Highlight region of samples e.g. using D3 plotting
-% \item Search for particular samples
-% \item Selected a sample in table and highlight
-% \item color removed samples by filter
-% \item adjustable x and y limits filter control plots
-% \item demo version on open source shiny server interfers with multiple users
-% \end{itemize}
 
 \section{Session info}
 

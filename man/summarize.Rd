@@ -2,7 +2,7 @@
 % Please edit documentation in R/summarization.R
 \name{summarize}
 \alias{summarize}
-\title{summarization of the human methylation 450k or EPIC samples}
+\title{summarization of Illumina Human DNA Methylation array data}
 \usage{
 summarize(targets, batchSize = -1, BPPARAM = NULL, rp.zero = TRUE,
   verbose = TRUE, file = NULL)

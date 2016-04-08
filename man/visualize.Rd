@@ -4,7 +4,8 @@
 \name{visualize}
 \alias{visualize}
 \alias{visualize,summarizedData-method}
-\title{visualize the summarized 450k data}
+\title{visualize the summarized Illumina Human DNA Methylation
+    array data}
 \usage{
 visualize(object, thresholds = list(MU = 10.5, OP = 11.75, BS = 12.75, HC =
   13.25, DP = 0.95), background = NULL, ...)
@@ -17,21 +18,22 @@ visualize(object, thresholds = list(MU = 10.5, OP = 11.75, BS = 12.75, HC =
 
 \item{thresholds}{default thresholds}
 
-\item{background}{optional summarizedData-object used as background in filter control plots}
+\item{background}{optional summarizedData-object used as
+background in filter control plots}
 
 \item{...}{for future use}
 }
 \value{
-lauches a web browser with the shiny application and returns a
-data.frame with detected outliers
+lauches a web browser with the shiny application and
+    returns a data.frame with detected outliers
 }
 \description{
-launch a shiny app for visualization of the summarized 450k data
+launch a shiny app for visualization of the summarized Illumina
+Human DNA Methylation array data
 }
 \details{
-Outliers are detected based on a set of default thresholds.
-To use a use-defined set of thresholds use the thresholds
-argument.
+Outliers are detected based on a set of default thresholds.  To
+use a use-defined set of thresholds use the thresholds argument.
 }
 \examples{
 library(minfiData)

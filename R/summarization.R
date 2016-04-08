@@ -6,7 +6,7 @@
 ##' in batches using the batchSize option. Summarization of data can be
 ##' performed in parallel as well see
 ##' the MethylAid vignette for examples.
-##' @title summarization of the human methylation 450k or EPIC samples
+##' @title summarization of Illumina Human DNA Methylation array data
 ##' @param targets valid minfi targets file
 ##' @param batchSize the size of each the batch
 ##' @param BPPARAM see bpparam()

@@ -3,7 +3,7 @@
 \docType{methods}
 \name{show,summarizedData-method}
 \alias{show,summarizedData-method}
-\title{show method for summarized 450k Illumina Human Methylation data}
+\title{show method for Illumina Human DNA Methylation array data}
 \usage{
 \S4method{show}{summarizedData}(object)
 }
@@ -14,7 +14,7 @@
 print short summary summarizedData object
 }
 \description{
-show method for summarized 450k Illumina Human Methylation data
+show method for summarized Illumina Human DNA Methylation array data
 }
 \examples{
 data(exampleData)

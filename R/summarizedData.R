@@ -1,4 +1,4 @@
-##' container for summarized 450k Illumina Human Methylation data
+##' container for summarized Illumina Human DNA Methylation array data
 ##'
 ##'@section Slots:
 ##'    \describe{
@@ -17,7 +17,7 @@
 ##'      \item{\code{plotdata}:}{Object of class \code{"list"}
 ##' containing data to make plotting efficient.}
 ##'    }
-##' @title container for summarized 450k Illumina Human Methylation data
+##' @title container for summarized Illumina Human DNA Methylation array data
 ##' @name summarizedData-class
 ##' @rdname summarizedData-class
 ##' @exportClass summarizedData
@@ -43,9 +43,9 @@ printSummarizedData <- function(object) {
         "            and all quality control probe intensities.\n", sep="")
 }
 
-##' show method for summarized 450k Illumina Human Methylation data
+##' show method for summarized Illumina Human DNA Methylation array data
 ##'
-##' @title show method for summarized 450k Illumina Human Methylation data
+##' @title show method for Illumina Human DNA Methylation array data
 ##' @param object summarizedData object
 ##' @return print short summary summarizedData object
 ##' @import methods

@@ -1,6 +1,5 @@
 
-check_summarizedData <- function(sData, numberOfSamples, numberOfTargetColumns)
-  {
+check_summarizedData <- function(sData, numberOfSamples, numberOfTargetColumns) {
 
     ##check if summarizedData is create correctly
     checkTrue(all(slotNames(sData) %in%
@@ -41,7 +40,7 @@ test_visualize <- function() {
 
   ##prepare targets
   baseDir <- system.file("extdata", package = "minfiData")
-  targets <- read.450k.sheet(baseDir)
+  targets <- read.metharray.sheet(baseDir)
   rownames(targets) <- paste(targets$Slide, targets$Array, sep="_")
   data <- summarize(targets)
 

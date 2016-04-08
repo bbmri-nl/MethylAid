@@ -1,21 +1,24 @@
-##' launch a shiny app for visualization of the summarized 450k data
+##' launch a shiny app for visualization of the summarized Illumina
+##' Human DNA Methylation array data
 ##'
-##' Outliers are detected based on a set of default thresholds.
-##' To use a use-defined set of thresholds use the thresholds
-##' argument.
-##' @title visualize the summarized 450k data
+##' Outliers are detected based on a set of default thresholds.  To
+##' use a use-defined set of thresholds use the thresholds argument.
+##' @title visualize the summarized Illumina Human DNA Methylation
+##'     array data
 ##' @param object summarizedData object
 ##' @param thresholds default thresholds
-##' @param background optional summarizedData-object used as background in filter control plots
+##' @param background optional summarizedData-object used as
+##'     background in filter control plots
 ##' @param ... for future use
-##' @return lauches a web browser with the shiny application and returns a
-##' data.frame with detected outliers
+##' @return lauches a web browser with the shiny application and
+##'     returns a data.frame with detected outliers
 ##' @import shiny ggplot2 RColorBrewer
 ##' @importFrom hexbin hexbin grid.hexagons
 ##' @importFrom grid pushViewport popViewport
 ##' @importFrom gridBase baseViewports
 ##' @importFrom grDevices dev.off pdf blues9 colorRampPalette
-##' @importFrom graphics abline axTicks axis legend par plot points rect text
+##' @importFrom graphics abline axTicks axis legend par plot points
+##'     rect text
 ##' @importFrom stats na.omit pnorm sd
 ##' @importFrom utils str write.csv
 ##' @export

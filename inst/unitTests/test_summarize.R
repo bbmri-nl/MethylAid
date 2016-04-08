@@ -4,7 +4,7 @@ test_summarize <- function() {
 
   ##prepare targets
   baseDir <- system.file("extdata", package = "minfiData")
-  targets <- read.450k.sheet(baseDir)
+  targets <- read.metharray.sheet(baseDir)
   rownames(targets) <- paste(targets$Slide, targets$Array, sep="_")
 
   ##summarize data some sanity checks

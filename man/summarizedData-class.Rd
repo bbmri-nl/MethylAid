@@ -3,9 +3,9 @@
 \docType{class}
 \name{summarizedData-class}
 \alias{summarizedData-class}
-\title{container for summarized 450k Illumina Human Methylation data}
+\title{container for summarized Illumina Human DNA Methylation array data}
 \description{
-container for summarized 450k Illumina Human Methylation data
+container for summarized Illumina Human DNA Methylation array data
 }
 \section{Slots}{
 

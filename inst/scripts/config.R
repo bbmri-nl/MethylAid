@@ -1,4 +1,4 @@
-cluster.functions = makeClusterFunctionsSGE(file.path(path.package("MethylAid"), "scripts", "sge.tmpl"))
+cluster.functions = makeClusterFunctionsSGE(system.file("scripts/sge.tmpl", package="MethylAid"))
 mail.start = "first+last"
 mail.done = "first+last"
 mail.error = "all"

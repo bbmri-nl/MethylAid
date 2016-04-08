@@ -5,7 +5,7 @@ height = "400px"
 start = "<br> <p style=\'width:800px;text-align:justify\'><span style=\'color:#000000;font-size:16px\'>"
   end = "</span></p><br><br>"
 
-hdrUI <- paste0("MethylAid:",'<sup>', packageVersion("MethylAid"),'</sup>' ," Interactive Visualization of Illumina 450k data")
+hdrUI <- paste0("MethylAid:",'<sup>', packageVersion("MethylAid"),'</sup>' ," Interactive Visualization of Illumina Human DNA Methylation array data")
 
 disclaimer <- paste("These controls are used to detect bad quality samples.",
                     "The default thresholds are based on our experience with",
