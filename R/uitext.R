@@ -9,7 +9,9 @@ hdrUI <- paste0("MethylAid:",'<sup>', packageVersion("MethylAid"),'</sup>' ," In
 
 disclaimer <- paste("These controls are used to detect bad quality samples.",
                     "The default thresholds are based on our experience with",
-                    "450k data that we have seen so far.", collapse="")
+                    "<b>450k</b> data that we have seen so far. Once we have",
+                    "collected a considerable number of <b>EPIC</b> arrays",
+                    "we will provided <b>EPIC</b> specific thresholds!", collapse="")
 
 htSDC <- paste("The sample-dependent controls can be used to evaluate",
            "performance across samples. These control oligos are",
