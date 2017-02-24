@@ -24,4 +24,3 @@ Concatenates two summarizedData objects into one object
 data(exampleData)
 combine(exampleData, exampleData)
 }
-

@@ -23,5 +23,5 @@ test_summarize <- function() {
   ##summarize all samples in one go
   data <- summarize(targets)
   checkEquals(nrow(data@targets) , nrow(targets))    
-
+    
 }

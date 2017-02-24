@@ -44,4 +44,3 @@ data <- summarize(targets)
 visualize(data)
 }
 }
-

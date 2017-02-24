@@ -2,8 +2,8 @@ Package: MethylAid
 Type: Package
 Title: Visual and interactive quality control of large Illumina DNA
        Methylation array data sets
-Version: 1.9.0
-Date: 2016-04-18
+Version: 1.9.1
+Date: 2017-02-23
 Authors@R: c(person("Maarten", "van Iterson",
         email="mviterson@gmail.com", role="cre"),
 	person("Elmar", "Tobi", role="ctb"),
@@ -23,7 +23,6 @@ Description: A visual and interactive web application using RStudio's
     diagnostic plots of the quality control probes present on the
     array. Furthermore, the impact of any batch effect provided by
     the user can be explored.
-URL: http://shiny.bioexp.nl/MethylAid
 License: GPL (>= 2)
 VignetteBuilder: knitr
 biocViews: DNAMethylation,
@@ -35,7 +34,7 @@ biocViews: DNAMethylation,
     Visualization,
     GUI
 Depends:
-    R (>= 3.0)
+    R (>= 3.4)
 Imports:
     Biobase,
     BiocParallel,
@@ -52,6 +51,7 @@ Imports:
     RColorBrewer,
     shiny,
     stats,
+    SummarizedExperiment,
     utils
 Suggests:
     BiocStyle,
@@ -59,6 +59,4 @@ Suggests:
     MethylAidData,
     minfiData,
     RUnit
-RoxygenNote: 5.0.1
-URL: https://github.com/mvaniterson/methylaid
-BugReports: https://github.com/mvaniterson/methylaid/issues
+RoxygenNote: 6.0.1

@@ -25,4 +25,3 @@ Generates a background dataset can be used in the filter plots
 \author{
 mvaniterson
 }
-

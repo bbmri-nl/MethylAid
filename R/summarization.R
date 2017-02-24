@@ -17,7 +17,8 @@
 ##' @import minfi 
 ##' BiocParallel
 ##' @importFrom matrixStats colMedians colMads
-##' @importFrom Biobase AnnotatedDataFrame varMetadata
+##' @importFrom Biobase AnnotatedDataFrame
+##' @importFrom SummarizedExperiment colData
 ##' @return summarized data is saved optionally returned
 ##' @author mvaniterson
 ##' @examples

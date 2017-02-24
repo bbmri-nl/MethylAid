@@ -8,13 +8,9 @@ replaceZero <- function(RGset) {
     Red[which(Red == 0)] <- NA
     Green[which(Green == 0)] <- NA
 
-    ##construct new RGChannelSet
-    pd <- pData(RGset)
-    meta <- varMetadata(RGset)
-
     RGChannelSet(Green = Green,
                  Red = Red,
-                 pheno = AnnotatedDataFrame(pd, meta),
+                 colData = colData(RGset),
                  annotation = annotation(RGset))
 }
 

@@ -20,4 +20,3 @@ show method for summarized Illumina Human DNA Methylation array data
 data(exampleData)
 exampleData
 }
-

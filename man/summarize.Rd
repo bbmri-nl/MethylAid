@@ -43,4 +43,3 @@ data <- summarize(targets)
 \author{
 mvaniterson
 }
-

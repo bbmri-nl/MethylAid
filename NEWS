@@ -1,0 +1,5 @@
+Changes in version 1.9:
+
+    o   adapted to changes in minfi such as, read.meth.array
+    o   now fully support for EPIC arrays
+    
