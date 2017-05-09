@@ -1,6 +1,5 @@
 ##initializer
-initialize <- function(object, output, thresholds, background, ...)
-    {
+initialize <- function(object, output, thresholds, background, ...) {
         ##cat("initialize...\n")
 
         ##construct container for the outliers
@@ -59,7 +58,7 @@ finalize <- function(object) {
     return(outliers)
 }
 
-server450k <- function(object, thresholds, background, ...) {
+server <- function(object, thresholds, background, ...) {
     function(input, output, session) {
 
         object <- updateObject(object)

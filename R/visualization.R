@@ -33,19 +33,38 @@
 ##' }
 setGeneric("visualize",
            function(object,
-                    thresholds  = list(MU = 10.50, OP = 11.75, BS = 12.75, HC = 13.25, DP = 0.95),
+                    thresholds = list(hm450k=list(MU = 10.50, OP = 11.75, BS = 12.75, HC = 13.25, DP = 0.95),
+                                      epic=list(MU = 10.5, OP = 12, BS = 12, HC = 13, DP = 0.95)),
                     background = NULL, ...)
                standardGeneric("visualize")
            )
 
+
+.arrayType <- function(object) {
+    ##little bit danger test
+    ifelse(any(object@plotdata$ExtendedType == "BS Conversion I-C6"), "hm450k", "epic")
+}
+
 ##' @rdname visualize
 setMethod("visualize", "summarizedData",
           function(object,
-                   thresholds = list(MU = 10.50, OP = 11.75, BS = 12.75, HC = 13.25, DP = 0.95),
+                   thresholds = list(hm450k=list(MU = 10.50, OP = 11.75, BS = 12.75, HC = 13.25, DP = 0.95),
+                                     epic=list(MU = 10.5, OP = 12, BS = 12, HC = 13, DP = 0.95)),
                    background = NULL, ...){
-              object <- updateObject(object) ##for visualize MethylAid version 1.5.1              
+
+              object <- updateObject(object) ##for visualize MethylAid version 1.5.1
               background <- updateObject(background)
-              app <- list(ui=ui450k(object),
-                          server=server450k(object, thresholds = thresholds, background = background, ...))
+
+              arrayType <- .arrayType(object)
+
+              if(!is.null(background)) {
+                  if(arrayType != .arrayType(background))
+                      message("Array-types differ between background and 'summarizedData'!")
+              }
+
+              thresholds <- thresholds[[arrayType]]
+
+              app <- list(ui=ui(object),
+                          server=server(object, thresholds = thresholds, background = background, ...))
               invisible(runApp(app))
           })

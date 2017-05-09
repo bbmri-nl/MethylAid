@@ -189,7 +189,7 @@ plotBS <- function(object, col, threshold, showOutliers=FALSE, background=FALSE)
     dGrn <- d[grepl("C1|C2|C3", d$ExtendedType), c(1:5,7)]
     x <- tapply(dGrn$IntGrn, dGrn$Samples, mean)
 
-    dRed <- d[grepl("C4|C5|C6", d$ExtendedType), c(1:6)]
+    dRed <- d[grepl("C4|C5|C6", d$ExtendedType), c(1:6)]  ##EPIC is missing I-C6 Bisulfite control probe and corresponding I-U6
     y <- tapply(dRed$IntRed, dRed$Samples, mean)
 
     data <- data.frame(x, y)

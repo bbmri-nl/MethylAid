@@ -7,11 +7,13 @@
 \title{visualize the summarized Illumina Human DNA Methylation
     array data}
 \usage{
-visualize(object, thresholds = list(MU = 10.5, OP = 11.75, BS = 12.75, HC =
-  13.25, DP = 0.95), background = NULL, ...)
+visualize(object, thresholds = list(hm450k = list(MU = 10.5, OP = 11.75, BS =
+  12.75, HC = 13.25, DP = 0.95), epic = list(MU = 10.5, OP = 12, BS = 12, HC =
+  13, DP = 0.95)), background = NULL, ...)
 
-\S4method{visualize}{summarizedData}(object, thresholds = list(MU = 10.5, OP =
-  11.75, BS = 12.75, HC = 13.25, DP = 0.95), background = NULL, ...)
+\S4method{visualize}{summarizedData}(object, thresholds = list(hm450k =
+  list(MU = 10.5, OP = 11.75, BS = 12.75, HC = 13.25, DP = 0.95), epic = list(MU
+  = 10.5, OP = 12, BS = 12, HC = 13, DP = 0.95)), background = NULL, ...)
 }
 \arguments{
 \item{object}{summarizedData object}

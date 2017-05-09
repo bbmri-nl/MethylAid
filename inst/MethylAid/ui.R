@@ -6,4 +6,4 @@
 
 ## assign("outliers", outliers, envir=globalenv())
 
-MethylAid:::ui450k(exampleData)
+MethylAid:::ui(exampleData)

@@ -13,6 +13,7 @@
 ##' @param rp.zero Default TRUE replaces zero intensity values with NA's
 ##' @param verbose default is TRUE
 ##' @param file if given summarized data is stored as RData object
+##' @param ... optional arguments to read.metharray.exp, i.e. force=TRUE
 ##' @export
 ##' @import minfi 
 ##' BiocParallel
@@ -27,7 +28,7 @@
 ##' targets <- read.metharray.sheet(baseDir)
 ##' data <- summarize(targets)
 summarize <- function(targets, batchSize=-1, BPPARAM=NULL, rp.zero=TRUE,
-                      verbose=TRUE, file=NULL) {
+                      verbose=TRUE, file=NULL, ...) {
     if(verbose)
         message(paste("Start summarization ..."))
 
@@ -37,12 +38,12 @@ summarize <- function(targets, batchSize=-1, BPPARAM=NULL, rp.zero=TRUE,
     if(is.null(BPPARAM))
         {
             if(batchSize == -1)
-                sData <- summarizeWholeBunch(targets, rp.zero, verbose)
+                sData <- summarizeWholeBunch(targets, rp.zero, verbose, ...)
             else
-                sData <- summarizePerBatch(targets, batchSize, rp.zero, verbose)
+                sData <- summarizePerBatch(targets, batchSize, rp.zero, verbose, ...)
         }
     else
-        sData <- summarizeParallel(targets, batchSize, BPPARAM, rp.zero, verbose)
+        sData <- summarizeParallel(targets, batchSize, BPPARAM, rp.zero, verbose, ...)
 
     ##prepare data for plotting  which speeds up the plotting in the shiny app
     if(verbose)
@@ -66,11 +67,11 @@ summarize <- function(targets, batchSize=-1, BPPARAM=NULL, rp.zero=TRUE,
     invisible(sData)
 }
 
-summarizeWholeBunch <- function(targets, rp.zero, verbose)  {
+summarizeWholeBunch <- function(targets, rp.zero, verbose, ...)  {
     if(verbose)
         message("Summarize data in one go...")
 
-    RGset <- read.metharray.exp(targets=targets)
+    RGset <- read.metharray.exp(targets=targets, ...)
 
     ##Set 0.0 to NA
     if(rp.zero)
@@ -105,7 +106,7 @@ summarizeWholeBunch <- function(targets, rp.zero, verbose)  {
     sData
 }
 
-summarizePerBatch <- function(targets, batchSize, rp.zero, verbose){
+summarizePerBatch <- function(targets, batchSize, rp.zero, verbose, ...){
     if(verbose)
         message("Summarize data in batches...")
 
@@ -118,7 +119,7 @@ summarizePerBatch <- function(targets, batchSize, rp.zero, verbose){
             if(verbose)
                 message(paste("Summarizing", length(ss), "samples..."))
 
-            RGset <- read.metharray.exp(targets=tg[ss,])         
+            RGset <- read.metharray.exp(targets=tg[ss,], ...)         
 
             ##Set 0.0 to NA
             if(rp.zero)
@@ -158,7 +159,7 @@ summarizePerBatch <- function(targets, batchSize, rp.zero, verbose){
     sData
 }
 
-summarizeParallel <- function(targets, batchSize,  BPPARAM, rp.zero, verbose) {
+summarizeParallel <- function(targets, batchSize,  BPPARAM, rp.zero, verbose, ...) {
     if(verbose)
         message("Summarize data in parallel...")
 
@@ -170,10 +171,10 @@ summarizeParallel <- function(targets, batchSize,  BPPARAM, rp.zero, verbose) {
 
     if(batchSize == -1)
         sumParallel <- function(x)
-            summarizeWholeBunch(x, rp.zero=rp.zero, verbose=verbose)
+            summarizeWholeBunch(x, rp.zero=rp.zero, verbose=verbose, ...)
     else
         sumParallel <- function(x)
-            summarizePerBatch(x, batchSize=batchSize, rp.zero=rp.zero, verbose=verbose)
+            summarizePerBatch(x, batchSize=batchSize, rp.zero=rp.zero, verbose=verbose, ...)
 
     ##using BiocParallel optionally can be run using batch jobs schedulers
     res <- bplapply(jobs, FUN=sumParallel, BPPARAM=BPPARAM)

@@ -5,7 +5,7 @@
 \title{summarization of Illumina Human DNA Methylation array data}
 \usage{
 summarize(targets, batchSize = -1, BPPARAM = NULL, rp.zero = TRUE,
-  verbose = TRUE, file = NULL)
+  verbose = TRUE, file = NULL, ...)
 }
 \arguments{
 \item{targets}{valid minfi targets file}
@@ -19,6 +19,8 @@ summarize(targets, batchSize = -1, BPPARAM = NULL, rp.zero = TRUE,
 \item{verbose}{default is TRUE}
 
 \item{file}{if given summarized data is stored as RData object}
+
+\item{...}{optional arguments to read.metharray.exp, i.e. force=TRUE}
 }
 \value{
 summarized data is saved optionally returned

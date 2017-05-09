@@ -8,10 +8,7 @@ start = "<br> <p style=\'width:800px;text-align:justify\'><span style=\'color:#0
 hdrUI <- paste0("MethylAid:",'<sup>', packageVersion("MethylAid"),'</sup>' ," Interactive Visualization of Illumina Human DNA Methylation array data")
 
 disclaimer <- paste("These controls are used to detect bad quality samples.",
-                    "The default thresholds are based on our experience with",
-                    "<b>450k</b> data that we have seen so far. Once we have",
-                    "collected a considerable number of <b>EPIC</b> arrays",
-                    "we will provided <b>EPIC</b> specific thresholds!", collapse="")
+                    "The default 450k/EPIC specific thresholds are used.", collapse="")
 
 htSDC <- paste("The sample-dependent controls can be used to evaluate",
            "performance across samples. These control oligos are",

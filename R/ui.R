@@ -1,4 +1,4 @@
-ui450k <- function(object) {
+ui <- function(object) {
 
     object <- updateObject(object)
 
