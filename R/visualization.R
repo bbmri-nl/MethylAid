@@ -34,7 +34,7 @@
 setGeneric("visualize",
            function(object,
                     thresholds = list(hm450k=list(MU = 10.50, OP = 11.75, BS = 12.75, HC = 13.25, DP = 0.95),
-                                      epic=list(MU = 10.5, OP = 12, BS = 12, HC = 13, DP = 0.95)),
+                                      epic=list(MU = 10, OP = 12, BS = 11.75, HC = 12.75, DP = 0.95)),
                     background = NULL, ...)
                standardGeneric("visualize")
            )
@@ -49,7 +49,8 @@ setGeneric("visualize",
 setMethod("visualize", "summarizedData",
           function(object,
                    thresholds = list(hm450k=list(MU = 10.50, OP = 11.75, BS = 12.75, HC = 13.25, DP = 0.95),
-                                     epic=list(MU = 10.5, OP = 12, BS = 12, HC = 13, DP = 0.95)),
+                                     epic=list(MU = 10, OP = 12, BS = 11.75, HC = 12.75, DP = 0.95)),
+
                    background = NULL, ...){
 
               object <- updateObject(object) ##for visualize MethylAid version 1.5.1
