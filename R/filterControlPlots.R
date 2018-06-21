@@ -147,10 +147,10 @@ plotOP <- function(object, col, threshold, showOutliers=FALSE, background=FALSE)
 
     dGrn <- d[d$ExtendedType %in% c("NP (C)", "NP (G)"), c(1:5,7)]        
     x <- tapply(dGrn$IntGrn, dGrn$Samples, mean)
-
+    is.na(x) <- !is.finite(x)
     dRed <- d[d$ExtendedType %in% c("NP (A)", "NP (T)"), c(1:6)]    
     y <- tapply(dRed$IntRed, dRed$Samples, mean)
-
+    is.na(y) <- !is.finite(y)
     data <- data.frame(x, y)
     targets <- object@targets
     data <- merge(data, targets, by="row.names", suffixes=c("", ".y")) ##as we expect x and y
